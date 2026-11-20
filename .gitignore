@@ -1,0 +1,13 @@
+# Secrets
+.env
+*.key
+*.pem
+
+# Service data (too big / private)
+data/
+config/
+logs/
+
+# OS junk
+.DS_Store
+Thumbs.db
