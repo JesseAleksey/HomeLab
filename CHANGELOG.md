@@ -4,6 +4,15 @@ Dates are local time (US Central). The server's time zone was `Etc/UTC` until 20
 
 ## 2026-11-23
 
+- **Doc accuracy fixes:**
+  - Port 53 is now described as a preventive step: AdGuard never hit `bind: address already in use`, because I disabled the `systemd-resolved` stub listener before starting it. (`docs/05`, `docs/troubleshooting.md`)
+  - `docs/07` Steps show how the repo was actually set up (`git init -b main` in the existing `~/homelab`, add the remote, `git pull origin main`), plus the real no-reply commit email, with `docs/screenshots/*.png` added to "What's in git".
+  - `docs/04` lists the exact fstab commands run.
+  - The 220 ms ping is no longer tied to wired Ethernet; Ethernet is planned for reliability. (`docs/01`)
+  - The eero fallback is named "ISP DNS (Default)" everywhere. (`docs/03`, `docs/troubleshooting.md`)
+  - The SSD model is `SDSSDA120G`. (`docs/01`)
+  - `docs/02` now follows the template: Time zone is step 5 and key-only SSH login sits under Next steps.
+  - Added a blank line in `.gitignore`.
 - **AdGuard dashboard screenshot:** added the cropped version (stat cards only, no client IPs) as `docs/screenshots/adguard-dashboard.png` and embedded it under Verification in `docs/05`.
 - **Screenshots:** added 9 verification screenshots in `docs/screenshots/` and embedded them under Verification in `docs/03` (docker ps, health check), `docs/04` (storage pool, NFS permissions), `docs/05` (nslookup, blocklists, upstream DNS, general settings) and `docs/06` (libraries). Left out the AdGuard dashboard screenshot because it showed top clients by IP; a cropped version will replace it later.
 - **Synology:** documented the MAC (`00:11:32:44:23:E4`), DSM 7.1.1-42962 Update 9, the static IP `192.168.4.10` set on the Synology to match the eero reservation, and the full NFS rule confirmed in DSM (read only, map all users to admin, async, non-privileged ports and cross-mount denied). (`docs/01`, `docs/04`)

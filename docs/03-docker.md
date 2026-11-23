@@ -41,14 +41,14 @@ Run AdGuard Home and Jellyfin as containers from one `docker-compose.yml`, with 
    ```bash
    docker run --rm hello-world
    ```
-4. Before starting the stack, mount the NAS ([04](04-synology-nas-and-nfs.md)) and free port 53 ([05](05-adguard-home.md#port-53-already-in-use-systemd-resolved)). Then:
+4. Before starting the stack, mount the NAS ([04](04-synology-nas-and-nfs.md)) and free port 53 ([05](05-adguard-home.md#port-53-held-by-systemd-resolved)). Then:
    ```bash
    docker compose up -d
    ```
 
 ### Updating
 
-> **AdGuard is the DNS for the whole house.** Recreating the `adguard` container takes DNS down for every device until it's back. Do it at a quiet time and have a fallback ready (e.g. temporarily switch the eero's DNS back to automatic).
+> **AdGuard is the DNS for the whole house.** Recreating the `adguard` container takes DNS down for every device until it's back. Do it at a quiet time and have a fallback ready (e.g. temporarily switch the eero's DNS to ISP DNS (Default), see [05](05-adguard-home.md#if-the-server-is-down)).
 
 The images are pinned by digest, so `docker compose pull` won't fetch anything new by itself. To update:
 

@@ -13,7 +13,7 @@ Before you change anything, run `./health-check.sh` ([03](03-docker.md#health-ch
 | SSH private key exposed | SSH | [02](02-ubuntu-install.md#private-ssh-key-exposed) |
 | Password login still works over SSH | SSH | [02](02-ubuntu-install.md#ssh-key-only-login-planned) |
 | High ping (~220 ms) on the server | Network | [01](01-hardware-and-planning.md#high-latency-over-usb-wi-fi) |
-| AdGuard: `bind: address already in use` on port 53 | DNS | [05](05-adguard-home.md#port-53-already-in-use-systemd-resolved) |
+| AdGuard needs port 53, but `systemd-resolved` holds it (stub listener disabled before first start) | DNS | [05](05-adguard-home.md#port-53-held-by-systemd-resolved) |
 | AdGuard: forgot admin password / HTTP 429 login lockout | DNS | [05](05-adguard-home.md#forgot-the-admin-password-login-rate-limited) |
 | eero Custom DNS greyed out | Router | [05](05-adguard-home.md#eero-custom-dns-greyed-out) |
 | Synology: can't create a shared folder; old pool data on the drives | NAS | [04](04-synology-nas-and-nfs.md#no-storage-pool-old-pool-data-on-the-drives) |
@@ -27,5 +27,5 @@ Before you change anything, run `./health-check.sh` ([03](03-docker.md#health-ch
 ## If DNS is down for the whole house
 
 1. Check the container: `docker inspect -f '{{.State.Status}}' adguard`.
-2. If you need DNS back right now, switch the eero's DNS to automatic in the eero app.
+2. If you need DNS back right now, switch the eero's DNS to ISP DNS (Default) in the eero app ([05](05-adguard-home.md#if-the-server-is-down)).
 3. Only then investigate or restart AdGuard. See CLAUDE.md Rule 1 and [05](05-adguard-home.md).

@@ -38,7 +38,7 @@ The settings above were not read from `adguard/conf`, which holds credentials an
 
 ## Steps
 
-1. Free port 53 on the host ([below](#port-53-already-in-use-systemd-resolved)).
+1. Free port 53 on the host ([below](#port-53-held-by-systemd-resolved)).
 2. `docker compose up -d adguard`.
 3. Open `http://192.168.4.46:3000` for the first-run wizard. Set the admin UI to port **8080** and DNS to port **53**.
 4. In the admin UI (`http://192.168.4.46:8080`):
@@ -97,11 +97,11 @@ The screenshot was taken a little later than the table, so its numbers are sligh
 
 ## Problems and fixes
 
-### Port 53 already in use (systemd-resolved)
+### Port 53 held by systemd-resolved
 
-AdGuard failed to start with `bind: address already in use`, because Ubuntu's `systemd-resolved` runs a stub DNS listener on `127.0.0.53:53`.
+Ubuntu's `systemd-resolved` holds port 53 (a stub DNS listener on `127.0.0.53:53`), so I disabled its stub listener before starting AdGuard. AdGuard never failed; without this step it would not have been able to bind port 53.
 
-Fix: turn off the stub listener and point the host's resolver at `1.1.1.1`:
+What I did: turn off the stub listener, point the host's resolver at `1.1.1.1`, then start AdGuard:
 
 ```bash
 sudo mkdir -p /etc/systemd/resolved.conf.d

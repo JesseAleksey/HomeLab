@@ -45,6 +45,15 @@ Boot from the USB with **F12** (one-time boot menu), then:
 
 From another machine: `ssh jesse_j@192.168.4.46`. Before you accept the host key, compare its fingerprint with the server console ([below](#first-ssh-connection-closed-after-accepting-the-host-key)).
 
+### 5. Time zone
+
+Set to `America/Chicago` on 2026-11-23, so logs and commits show local time:
+
+```bash
+sudo timedatectl set-timezone America/Chicago
+timedatectl | grep 'Time zone'    # America/Chicago (CST, -0600)
+```
+
 ## Verification
 
 ```bash
@@ -103,21 +112,6 @@ Fix (2026-11-23):
 
 Password login is still enabled, so key-only login is the next step ([below](#ssh-key-only-login-planned)).
 
-## SSH key-only login (planned)
-
-Not done yet. `sudo sshd -T | grep -i passwordauthentication` shows `passwordauthentication yes`, which comes from `/etc/ssh/sshd_config.d/50-cloud-init.conf`.
-
-That drop-in sets `PasswordAuthentication yes`. sshd uses the **first** value it reads for each setting, and it reads the `sshd_config.d/` drop-ins before the rest of the main `sshd_config`, so the cloud-init file wins. To turn password login off, change it in `50-cloud-init.conf` (after a backup), not just in `sshd_config`. Then validate with `sudo sshd -t`, reload ssh, and confirm that key login still works from a second session before closing the first.
-
-## Time zone
-
-Set to `America/Chicago` on 2026-11-23, so logs and commits show local time:
-
-```bash
-sudo timedatectl set-timezone America/Chicago
-timedatectl | grep 'Time zone'    # America/Chicago (CST, -0600)
-```
-
 ## What I learned
 
 - The install media has to match the boot mode. When UEFI was greyed out, I had to stay on Legacy and build the USB with MBR instead of GPT.
@@ -129,6 +123,12 @@ timedatectl | grep 'Time zone'    # America/Chicago (CST, -0600)
 
 - [ ] Test or throw away the suspect "1 TB" USB stick.
 - [x] Replace the exposed SSH key ([above](#private-ssh-key-exposed)).
-- [ ] SSH key-only login: set `PasswordAuthentication no` in `50-cloud-init.conf` ([above](#ssh-key-only-login-planned)).
-- [x] Set the time zone to `America/Chicago` ([above](#time-zone)).
+- [ ] SSH key-only login: set `PasswordAuthentication no` in `50-cloud-init.conf` ([below](#ssh-key-only-login-planned)).
+- [x] Set the time zone to `America/Chicago` ([above](#5-time-zone)).
 - [ ] Reinstall on the HP ProDesk 600 G6 when it's ready ([01](01-hardware-and-planning.md#next-steps)).
+
+### SSH key-only login (planned)
+
+Not done yet. `sudo sshd -T | grep -i passwordauthentication` shows `passwordauthentication yes`, which comes from `/etc/ssh/sshd_config.d/50-cloud-init.conf`.
+
+That drop-in sets `PasswordAuthentication yes`. sshd uses the **first** value it reads for each setting, and it reads the `sshd_config.d/` drop-ins before the rest of the main `sshd_config`, so the cloud-init file wins. To turn password login off, change it in `50-cloud-init.conf` (after a backup), not just in `sshd_config`. Then validate with `sudo sshd -t`, reload ssh, and confirm that key login still works from a second session before closing the first.

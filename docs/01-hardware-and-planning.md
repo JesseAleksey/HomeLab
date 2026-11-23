@@ -10,7 +10,7 @@ I repurposed the Dell OptiPlex 7010 because I already had it. It's a stopgap: an
 
 | Role | Device | Details |
 |---|---|---|
-| Docker host (`jaramilloserver`) | Dell OptiPlex 7010 | Intel Core i5-3570 (4C/4T, 3.4 GHz, HD Graphics 2500), 8 GB RAM, SanDisk SSD Plus 120 GB (`SDSSDA12`, 111.8 GiB usable), Legacy BIOS boot |
+| Docker host (`jaramilloserver`) | Dell OptiPlex 7010 | Intel Core i5-3570 (4C/4T, 3.4 GHz, HD Graphics 2500), 8 GB RAM, SanDisk SSD Plus 120 GB (`SDSSDA120G`, 111.8 GiB usable), Legacy BIOS boot |
 | Host OS | Ubuntu Server 26.04.1 LTS | Docker + Docker Compose ([03](03-docker.md)) |
 | Network | USB Wi-Fi adapter | Interface `wlx90de8000ec5a` |
 | NAS | Synology DS214se | 2 × 3 TB, SHR (1-drive fault tolerance), `/volume1/media` over NFS ([04](04-synology-nas-and-nfs.md)) |
@@ -64,9 +64,8 @@ Checked 2026-11-23: both match. Both reservations (`.46` and `.10`) are set in t
 
 Pings of around 220 ms over the USB Wi-Fi adapter.
 
-- The ~220 ms was `ping google.com` run from the server on 2026-11-22, right after the port 53 fix.
+- The ~220 ms was `ping google.com` run from the server on 2026-11-22, right after freeing port 53 for AdGuard.
 - Retest from the server on 2026-11-23 was normal: router `192.168.4.1` avg 5 ms, NAS `192.168.4.10` avg 3 ms, `1.1.1.1` avg 54 ms (20–85 ms, high jitter). So the 220 ms was a one-time spike.
-- Fix: planned move to wired Ethernet. Not done yet.
 
 ## What I learned
 
@@ -76,6 +75,6 @@ Pings of around 220 ms over the USB Wi-Fi adapter.
 
 ## Next steps
 
-- [ ] Wired Ethernet for the server (fixes the Wi-Fi latency). After the switch, update the MAC in the DHCP reservation and the interface name in this doc and in CLAUDE.md.
+- [ ] Wired Ethernet for reliability. After the switch, update the MAC in the DHCP reservation and the interface name in this doc and in CLAUDE.md.
 - [ ] Move to an HP ProDesk 600 G6 (i5-10500, 16 GB) once it has an NVMe SSD.
 - [ ] Add the reserved services: Nginx Proxy Manager, Uptime Kuma, Grafana.

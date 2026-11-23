@@ -82,12 +82,15 @@ CLAUDE.md and the README said the share was mounted `ro`, but on 2026-11-23 `fin
 Fix (2026-11-23):
 
 ```bash
-sudo cp -a /etc/fstab /etc/fstab.bak-2026-11-23
-sudo sed -i '11s|nfs defaults,_netdev|nfs ro,_netdev|' /etc/fstab
+sudo cp -p /etc/fstab /etc/fstab.bak-2026-11-23
+sudo sed -i 's#^192.168.4.10:/volume1/media /mnt/media nfs defaults,_netdev#192.168.4.10:/volume1/media /mnt/media nfs ro,_netdev#' /etc/fstab
+grep media /etc/fstab                  # ... nfs ro,_netdev 0 0
+sudo mount -o remount,ro /mnt/media
+findmnt -no OPTIONS /mnt/media         # starts with "ro,"
 sudo systemctl daemon-reload
 ```
 
-The live mount was then read-only (`findmnt` shows `ro,`). The health check also got a new check (2b) that fails if the mount isn't `ro`.
+The `sed` only changes the media line. The remount made the live mount read-only without unmounting, and `daemon-reload` makes systemd pick up the edited fstab. The health check also got a new check (2b) that fails if the mount isn't `ro`.
 
 ### Second NFS export not documented
 

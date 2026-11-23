@@ -6,7 +6,7 @@ Keep the homelab config and docs in a GitHub repo without ever committing privat
 
 ## What I built
 
-- Repo [`JesseAleksey/HomeLab`](https://github.com/JesseAleksey/HomeLab), cloned at `~/homelab` on the server.
+- Repo [`JesseAleksey/HomeLab`](https://github.com/JesseAleksey/HomeLab), linked to the existing `~/homelab` folder on the server.
 - `gh` signed in over HTTPS; commits use the GitHub no-reply email address.
 - Claude Code (native installer, at `~/.local/bin/claude`), logged in with a Claude Pro plan.
 - [`CLAUDE.md`](../CLAUDE.md): rules and context for Claude Code in this repo. Summary of the rules:
@@ -19,7 +19,7 @@ Keep the homelab config and docs in a GitHub repo without ever committing privat
 ```bash
 git ls-files
 # .gitignore  CHANGELOG.md  CLAUDE.md  README.md  docker-compose.yml  health-check.sh
-# docs/*.md   docs/screenshots/.gitkeep
+# docs/*.md   docs/screenshots/.gitkeep   docs/screenshots/*.png
 ```
 
 ## Steps
@@ -32,9 +32,16 @@ git ls-files
    Enter the one-time code shown on another device's browser.
 3. Use the no-reply address for commits (find it under *GitHub → Settings → Emails*):
    ```bash
-   git config --global user.email "<id>+<username>@users.noreply.github.com"
+   git config --global user.email "157409608+JesseAleksey@users.noreply.github.com"
    ```
-4. Clone it: `gh repo clone JesseAleksey/HomeLab ~/homelab`.
+4. Turn the existing `~/homelab` folder into a repo and connect it to GitHub:
+   ```bash
+   cd ~/homelab
+   git init -b main
+   git remote add origin https://github.com/JesseAleksey/HomeLab.git
+   git pull origin main
+   ```
+   The pull failed because of the local `.gitignore` ([below](#git-pull-fails-untracked-working-tree-files-would-be-overwritten-gitignore)).
 5. Install Claude Code with the native installer:
    ```bash
    curl -fsSL https://claude.ai/install.sh | bash
@@ -50,9 +57,9 @@ git status --ignored      # adguard/ and jellyfin/ listed as ignored
 git ls-files              # only the files listed above
 ```
 
-Checked 2026-11-23: `gh` is logged in over HTTPS, Claude Code 2.1.330, and the commit email is a no-reply address.
+Checked 2026-11-23: `gh` is logged in over HTTPS, Claude Code 2.1.330, and `git config --global user.email` is the no-reply address `157409608+JesseAleksey@users.noreply.github.com`.
 
-The server's time zone is `America/Chicago` (set 2026-11-23, see [02](02-ubuntu-install.md#time-zone)), so new commits show local time (`-0600` in winter). Commits made before the change show UTC (`+0000`).
+The server's time zone is `America/Chicago` (set 2026-11-23, see [02](02-ubuntu-install.md#5-time-zone)), so new commits show local time (`-0600` in winter). Commits made before the change show UTC (`+0000`).
 
 ### Screenshots
 
@@ -74,12 +81,12 @@ Fix: move the local file aside, pull, then add its rules to the pulled version:
 
 ```bash
 mv .gitignore .gitignore.local
-git pull
+git pull origin main
 cat .gitignore.local >> .gitignore    # then remove any duplicate lines
 rm .gitignore.local
 git add .gitignore
 git commit -m "Merge local .gitignore rules"
-git push
+git push -u origin main    # first push: sets origin/main as upstream, later pushes are just `git push`
 ```
 
 Before pushing, check `git status --ignored` and `git ls-files` ([Verification](#verification)). If a data folder was already committed, untrack it without deleting it: `git rm -r --cached adguard jellyfin`.
