@@ -11,3 +11,6 @@ logs/
 # OS junk
 .DS_Store
 Thumbs.db
+# Docker app data (logs, caches, password hashes)
+adguard/
+jellyfin/
