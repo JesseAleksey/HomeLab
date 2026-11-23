@@ -15,3 +15,6 @@ Thumbs.db
 # Docker app data (logs, caches, password hashes)
 adguard/
 jellyfin/
+
+# Local assistant notes (kept on the server, not published)
+CLAUDE.md

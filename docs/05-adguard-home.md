@@ -4,7 +4,7 @@
 
 Block ads and trackers for every device in the house at the DNS level, by making the server the eero's DNS.
 
-> **AdGuard is the DNS for the whole house.** If the `adguard` container stops or gets recreated, every device loses DNS. See CLAUDE.md Rule 1 and the update procedure in [03](03-docker.md#updating).
+> **AdGuard is the DNS for the whole house.** If the `adguard` container stops or gets recreated, every device loses DNS. Don't stop or restart it without warning the household first; see the update procedure in [03](03-docker.md#updating).
 
 ## What I built
 
@@ -34,7 +34,7 @@ General settings:
 
 The admin login is a local username whose bcrypt password hash is stored in `AdGuardHome.yaml`. AdGuard has no email address or online account, so there's no "forgot password" option ([below](#forgot-the-admin-password-login-rate-limited)).
 
-The settings above were not read from `adguard/conf`, which holds credentials and is never put into docs (CLAUDE.md Rule 3).
+The settings above were not read from `adguard/conf`, which holds credentials and is never put into docs or commits.
 
 ## Steps
 
@@ -134,13 +134,13 @@ Fix (2026-11-23):
    htpasswd -B -C 10 -n <username>    # prints <username>:<hash>
    ```
 2. Backed up `AdGuardHome.yaml`.
-3. Stopped AdGuard. **This is a brief house-wide DNS outage** (CLAUDE.md Rule 1).
+3. Stopped AdGuard. **This is a brief house-wide DNS outage**, so warn the household first.
 4. Replaced the user's `password:` hash in `AdGuardHome.yaml`.
 5. Started AdGuard and confirmed with `./health-check.sh`.
 
 The restart also clears the rate-limit lockout.
 
-Never commit `AdGuardHome.yaml` or its backup. They live in `adguard/`, which is git-ignored (CLAUDE.md Rule 3).
+Never commit `AdGuardHome.yaml` or its backup. They live in `adguard/`, which is git-ignored and never committed.
 
 ## If the server is down
 

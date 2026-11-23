@@ -2,6 +2,8 @@
 
 Self-hosted DNS ad-blocking and media streaming on a repurposed Dell OptiPlex, with media stored on a Synology NAS.
 
+Tools: Docker, Git/GitHub, and Claude Code as an AI assistant for drafting configs and docs. Every change was reviewed and verified on the live system.
+
 ## Hardware
 
 | Role | Device | Details |
@@ -56,7 +58,7 @@ Check the whole stack (read-only) with `./health-check.sh` ([details](docs/03-do
 4. [Synology NAS and NFS](docs/04-synology-nas-and-nfs.md): SHR pool, NFS export, read-only mount
 5. [AdGuard Home](docs/05-adguard-home.md): port 53, blocklists, upstreams, eero DNS
 6. [Jellyfin](docs/06-jellyfin.md): libraries, read-only settings, VAAPI
-7. [GitHub and Claude Code](docs/07-github-and-claude-code.md): repo, `gh`, CLAUDE.md, what's in git
+7. [Version control and tools](docs/07-version-control-and-tools.md): repo, `gh`, commit email, what's in git
 
 - [Troubleshooting](docs/troubleshooting.md): every problem I've hit, with links to the fixes
 - [Changelog](CHANGELOG.md)

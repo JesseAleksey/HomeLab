@@ -21,11 +21,10 @@ Before you change anything, run `./health-check.sh` ([03](03-docker.md#health-ch
 | Health check passed but missed a problem | Docker | [03](03-docker.md#health-check-didnt-catch-a-read-write-nas-mount) |
 | HEVC playback fails or maxes out the CPU | Jellyfin | [06](06-jellyfin.md#igpu-cant-transcode-hevc) |
 | Jellyfin errors saving artwork, NFO or subtitles | Jellyfin | [06](06-jellyfin.md#jellyfin-features-that-write-to-a-read-only-share) |
-| `git pull`: untracked `.gitignore` would be overwritten | Git | [07](07-github-and-claude-code.md#git-pull-fails-untracked-working-tree-files-would-be-overwritten-gitignore) |
-| Claude Code login: "Pro is required" | Claude Code | [07](07-github-and-claude-code.md#claude-code-login-pro-is-required) |
+| `git pull`: untracked `.gitignore` would be overwritten | Git | [07](07-version-control-and-tools.md#git-pull-fails-untracked-working-tree-files-would-be-overwritten-gitignore) |
 
 ## If DNS is down for the whole house
 
 1. Check the container: `docker inspect -f '{{.State.Status}}' adguard`.
 2. If you need DNS back right now, switch the eero's DNS to ISP DNS (Default) in the eero app ([05](05-adguard-home.md#if-the-server-is-down)).
-3. Only then investigate or restart AdGuard. See CLAUDE.md Rule 1 and [05](05-adguard-home.md).
+3. Only then investigate or restart AdGuard. AdGuard is the house DNS, so warn the household before restarting it. See [05](05-adguard-home.md).

@@ -4,6 +4,7 @@ Dates are local time (US Central). The server's time zone was `Etc/UTC` until 20
 
 ## 2026-11-23
 
+- **Repo cleanup:** stopped tracking the AI assistant's notes file (CLAUDE.md), kept on the server and now in `.gitignore`; renamed `docs/07` to [Version control and tools](docs/07-version-control-and-tools.md) with a short note on how I used an AI assistant; rule references in `docs/05` and `docs/troubleshooting.md` now state the rule itself; added a Tools line to the README.
 - **Doc accuracy fixes:**
   - Port 53 is now described as a preventive step: AdGuard never hit `bind: address already in use`, because I disabled the `systemd-resolved` stub listener before starting it. (`docs/05`, `docs/troubleshooting.md`)
   - `docs/07` Steps show how the repo was actually set up (`git init -b main` in the existing `~/homelab`, add the remote, `git pull origin main`), plus the real no-reply commit email, with `docs/screenshots/*.png` added to "What's in git".
@@ -35,7 +36,7 @@ Dates are local time (US Central). The server's time zone was `Etc/UTC` until 20
 Built the homelab: Ubuntu Server on the OptiPlex 7010, Docker, the Synology SHR pool and NFS export, AdGuard Home and Jellyfin.
 
 - Added `docker-compose.yml` for AdGuard Home and Jellyfin, with host networking. (`fd13a9b`)
-- Added `CLAUDE.md` with the hardware, network, services and rules. (`f191e55`)
+- Added the AI assistant's notes file (CLAUDE.md) with the hardware, network, services and rules. (`f191e55`; kept local and untracked since 2026-11-23)
 - Added a read-only `health-check.sh` for the containers, NAS mount, DNS, Jellyfin and disk. (`5c88a2b`)
 - Pinned images to their running digests: AdGuard Home `v1.0.0`, Jellyfin `12.4`. (`500f172`)
 - Rewrote the README to match the actual setup. (`527d616`)

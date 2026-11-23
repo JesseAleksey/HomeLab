@@ -75,6 +75,6 @@ Pings of around 220 ms over the USB Wi-Fi adapter.
 
 ## Next steps
 
-- [ ] Wired Ethernet for reliability. After the switch, update the MAC in the DHCP reservation and the interface name in this doc and in CLAUDE.md.
+- [ ] Wired Ethernet for reliability. After the switch, update the MAC in the DHCP reservation and the interface name in this doc.
 - [ ] Move to an HP ProDesk 600 G6 (i5-10500, 16 GB) once it has an NVMe SSD.
 - [ ] Add the reserved services: Nginx Proxy Manager, Uptime Kuma, Grafana.

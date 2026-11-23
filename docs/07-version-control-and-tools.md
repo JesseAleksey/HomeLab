@@ -1,24 +1,19 @@
-# 07 · GitHub and Claude Code
+# 07 · Version control and tools
 
 ## Goal
 
-Keep the homelab config and docs in a GitHub repo without ever committing private data, and use Claude Code on the server to help run and document it.
+Keep the homelab config and docs in a GitHub repo without ever committing private data.
 
 ## What I built
 
 - Repo [`JesseAleksey/HomeLab`](https://github.com/JesseAleksey/HomeLab), linked to the existing `~/homelab` folder on the server.
 - `gh` signed in over HTTPS; commits use the GitHub no-reply email address.
-- Claude Code (native installer, at `~/.local/bin/claude`), logged in with a Claude Pro plan.
-- [`CLAUDE.md`](../CLAUDE.md): rules and context for Claude Code in this repo. Summary of the rules:
-  1. Never stop, restart, recreate or update the `adguard` container without asking (it's the house DNS).
-  2. Explain each command before running it.
-  3. Never commit `adguard/` or `jellyfin/`.
 
 ### What's in git
 
 ```bash
 git ls-files
-# .gitignore  CHANGELOG.md  CLAUDE.md  README.md  docker-compose.yml  health-check.sh
+# .gitignore  CHANGELOG.md  README.md  docker-compose.yml  health-check.sh
 # docs/*.md   docs/screenshots/.gitkeep   docs/screenshots/*.png
 ```
 
@@ -42,28 +37,26 @@ git ls-files
    git pull origin main
    ```
    The pull failed because of the local `.gitignore` ([below](#git-pull-fails-untracked-working-tree-files-would-be-overwritten-gitignore)).
-5. Install Claude Code with the native installer:
-   ```bash
-   curl -fsSL https://claude.ai/install.sh | bash
-   ```
-   Then run `claude` in `~/homelab` and log in with the Pro account ([below](#claude-code-login-pro-is-required)).
 
 ## Verification
 
 ```bash
 gh auth status            # Logged in to github.com account JesseAleksey, protocol https
-claude --version
 git status --ignored      # adguard/ and jellyfin/ listed as ignored
 git ls-files              # only the files listed above
 ```
 
-Checked 2026-11-23: `gh` is logged in over HTTPS, Claude Code 2.1.330, and `git config --global user.email` is the no-reply address `157409608+JesseAleksey@users.noreply.github.com`.
+Checked 2026-11-23: `gh` is logged in over HTTPS, and `git config --global user.email` is the no-reply address `157409608+JesseAleksey@users.noreply.github.com`.
 
 The server's time zone is `America/Chicago` (set 2026-11-23, see [02](02-ubuntu-install.md#5-time-zone)), so new commits show local time (`-0600` in winter). Commits made before the change show UTC (`+0000`).
 
 ### Screenshots
 
 Screenshots go in [`docs/screenshots/`](screenshots/). AdGuard and Jellyfin screens can show client IPs, query logs, usernames and API keys, so crop or blur them before committing.
+
+## AI assistance
+
+I used Claude Code as an assistant for drafting configs and docs. I reviewed every command before it ran and verified the results on the live system.
 
 ## Problems and fixes
 
@@ -91,17 +84,11 @@ git push -u origin main    # first push: sets origin/main as upstream, later pus
 
 Before pushing, check `git status --ignored` and `git ls-files` ([Verification](#verification)). If a data folder was already committed, untrack it without deleting it: `git rm -r --cached adguard jellyfin`.
 
-### Claude Code login: "Pro is required"
-
-The first login failed with "Pro is required", because the browser was signed in to the wrong Claude account.
-
-Fix: switch the browser to the account with the Pro plan, then log in again.
-
 ## What I learned
 
 - Check what's being uploaded before every push to a public repo. A `.gitignore` plus `git ls-files` keeps logs and password hashes private.
 - Git conflicts are protective, not broken. "Untracked files would be overwritten" meant git was refusing to destroy my local file.
-- AI tools speed up the work but need supervision. Claude Code guessed wrong when it lacked context, so a `CLAUDE.md` file and reviewing every command made it reliable.
+- AI tools speed up the work but need supervision. The assistant guessed wrong when it lacked context, so I gave it written context, reviewed every command and checked results on the live system.
 - Documentation has to match reality. Verifying the live system before writing things down caught real mistakes in my own docs.
 
 ## Next steps

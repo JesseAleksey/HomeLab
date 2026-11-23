@@ -77,7 +77,7 @@ Fix: I chose to erase the old pool data, then created a new SHR storage pool on 
 
 ### Docs said read-only but the host mount was read-write
 
-CLAUDE.md and the README said the share was mounted `ro`, but on 2026-11-23 `findmnt` showed `rw`. `/etc/fstab` still had `defaults,_netdev`, and the backup the docs mentioned didn't exist. Jellyfin was still protected by its `:ro` bind, but anything else on the host could write to the NAS. The health check passed because it only checked that the share was mounted.
+The README and my server notes said the share was mounted `ro`, but on 2026-11-23 `findmnt` showed `rw`. `/etc/fstab` still had `defaults,_netdev`, and the backup the docs mentioned didn't exist. Jellyfin was still protected by its `:ro` bind, but anything else on the host could write to the NAS. The health check passed because it only checked that the share was mounted.
 
 Fix (2026-11-23):
 
