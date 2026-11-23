@@ -4,6 +4,8 @@ Self-hosted DNS ad-blocking and media streaming on a repurposed Dell OptiPlex, w
 
 Tools: Docker, Git/GitHub, and Claude Code as an AI assistant for drafting configs and docs. Every change was reviewed and verified on the live system.
 
+Skills demonstrated: Linux (Ubuntu Server), Docker Compose, DNS (AdGuard Home, DNS over HTTPS), DHCP reservations, NFS, RAID (Synology SHR), SSH key management, Bash scripting, Git/GitHub, troubleshooting and documentation.
+
 ## Hardware
 
 | Role | Device | Details |
@@ -45,6 +47,8 @@ Subnet `192.168.4.0/22`.
 Both run in Docker with host networking ([`docker-compose.yml`](docker-compose.yml)). Reserved ports are in the [port plan](docs/01-hardware-and-planning.md#port-plan).
 
 AdGuard's last 24 hours (2026-11-23): **64,219 DNS queries from 32 devices, 10,776 blocked (16.8%)**, 84 ms average processing time ([details](docs/05-adguard-home.md#verification)).
+
+![AdGuard dashboard, last 24 hours: 65,834 DNS queries, 10,999 blocked (17%)](docs/screenshots/adguard-dashboard.png)
 
 > **AdGuard is the DNS for the whole house.** Don't restart or recreate it casually; see [Updating](docs/03-docker.md#updating).
 
