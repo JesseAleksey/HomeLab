@@ -69,5 +69,5 @@ Fix: turned those savers off (table above), so metadata stays in `./jellyfin/con
 ## Next steps
 
 - [ ] Confirm hardware transcoding and list client apps (TODOs above).
-- [ ] TODO: set a scheduled library scan, since real-time monitoring is off.
+- [ ] Schedule Jellyfin's **Scan media library** task daily at 3 AM in *Dashboard → Scheduled Tasks*, since real-time monitoring is off.
 - [ ] Revisit HEVC and trickplay on the HP ProDesk 600 G6.

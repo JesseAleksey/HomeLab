@@ -74,7 +74,8 @@ Rufus hides drives it treats as "fixed" disks (common with USB SSDs, enclosures 
 
 The installer USB was a generic "1 TB" drive. A corrupted filename suggests it's a fake-capacity drive: it reports more space than it has, and data written past the real size gets corrupted.
 
-- TODO: what did you do about it (re-write, different stick)? Did the install media check pass?
+- I used it anyway, because the installer only writes ~3 GB at the start of the drive. The install completed and the system boots fine. I didn't run the install media check.
+- I won't use this stick for real data.
 - Before using a stick like this again, test it with H2testw (Windows) or `f3write`/`f3read` (Linux).
 
 ### First SSH connection closed after accepting the host key
@@ -87,7 +88,7 @@ Fix: compared the fingerprint with the one on the server console, confirmed they
 ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub
 ```
 
-TODO: cause unknown.
+Cause unknown. It happened once, on the first connection after install, and retrying worked.
 
 ## What I learned
 

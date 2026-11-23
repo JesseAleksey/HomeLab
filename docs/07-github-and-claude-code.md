@@ -100,5 +100,5 @@ Fix: switch the browser to the account with the Pro plan, then log in again.
 
 ## Next steps
 
-- [ ] TODO: set the server's time zone to `America/Chicago` (`sudo timedatectl set-timezone America/Chicago`) if you want local commit times.
+- [ ] Set the server's time zone to `America/Chicago` for local commit times. I'll run this myself: `sudo timedatectl set-timezone America/Chicago`.
 - [ ] Keep [CHANGELOG.md](../CHANGELOG.md) updated with each change.

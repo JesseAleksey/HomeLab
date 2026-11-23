@@ -64,8 +64,8 @@ Checked 2026-11-23: both match. Both reservations (`.46` and `.10`) are set in t
 
 Pings of around 220 ms over the USB Wi-Fi adapter.
 
-- TODO: note what the ~220 ms ping was measured to (router, NAS, internet) and from where.
-- Measured from the server on 2026-11-23: router `192.168.4.1` avg 5 ms, NAS `192.168.4.10` avg 3 ms, `1.1.1.1` avg 54 ms (20–85 ms, high jitter). So the latency varies a lot over time.
+- The ~220 ms was `ping google.com` run from the server on 2026-11-22, right after the port 53 fix.
+- Retest from the server on 2026-11-23 was normal: router `192.168.4.1` avg 5 ms, NAS `192.168.4.10` avg 3 ms, `1.1.1.1` avg 54 ms (20–85 ms, high jitter). So the 220 ms was a one-time spike.
 - Fix: planned move to wired Ethernet. Not done yet.
 
 ## What I learned

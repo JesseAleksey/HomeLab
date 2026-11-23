@@ -112,4 +112,4 @@ The health check only tested that `/mnt/media` was mounted, so it passed while t
 ## Next steps
 
 - [ ] Run `health-check.sh` on a schedule (cron or Uptime Kuma) and alert on failure.
-- [ ] TODO: back up `adguard/` and `jellyfin/`. Where to? (The NAS also exports `/volume1/homelab-backup`, see [04](04-synology-nas-and-nfs.md#problems-and-fixes).)
+- [ ] Back up `adguard/` and `jellyfin/` (planned): nightly tar archives to the NAS export `/volume1/homelab-backup`, keeping the last 14. To be documented in `docs/08-backups.md` (not written yet). See also [04](04-synology-nas-and-nfs.md#second-nfs-export-not-documented).

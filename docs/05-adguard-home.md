@@ -83,6 +83,13 @@ The Custom DNS option in the eero app couldn't be changed.
 
 Fix: turn off **all eero Secure features** (eero Plus ad blocking and filtering use their own DNS). After that, Custom DNS can be set.
 
+## If the server is down
+
+Every device loses DNS while AdGuard is down. To get the house back online:
+
+1. In the eero app, go to **Settings → Network settings → DNS** and choose **ISP DNS (Default)**.
+2. After the server is fixed, switch back to **Custom** DNS `192.168.4.46`.
+
 ## What I learned
 
 - Ubuntu's own DNS stub will clash with any DNS server on port 53.
@@ -93,5 +100,5 @@ Fix: turn off **all eero Secure features** (eero Plus ad blocking and filtering 
 ## Next steps
 
 - [ ] Fill in the upstream mode.
-- [ ] TODO: a fallback DNS plan for when the server is down (second AdGuard instance, or a documented eero switch-back).
+- [x] A fallback DNS plan for when the server is down: switch the eero back to ISP DNS ([steps](#if-the-server-is-down)).
 - [ ] Put the admin UI behind Nginx Proxy Manager (80/443) once it's set up.

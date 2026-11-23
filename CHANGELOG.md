@@ -4,6 +4,7 @@ Dates are local time (US Central). Commit timestamps in git are UTC because the 
 
 ## 2026-11-23
 
+- Filled in doc TODOs: the 220 ms ping spike, the fake-capacity USB stick and the first SSH disconnect, the planned use of `/volume1/homelab-backup` for nightly backups (future `docs/08-backups.md`), the planned off-NAS media backup, the eero fallback DNS steps, the daily library scan and the time zone plan.
 - Reorganised the docs: the README is now a short overview, and the details live in `docs/01`–`07`, `docs/troubleshooting.md` and this changelog.
 - **Applied the read-only NAS mount on the host:** `/etc/fstab` changed from `defaults,_netdev` to `ro,_netdev` (backup `/etc/fstab.bak-2026-11-23`). The docs had said `ro`, but the live mount was `rw`. (`b4867a5`)
 - Added health check 2b: fails if `/mnt/media` isn't mounted read-only. (`c96c52f`)

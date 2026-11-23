@@ -80,7 +80,7 @@ The live mount was then read-only (`findmnt` shows `ro,`). The health check also
 
 `showmount -e 192.168.4.10` also lists `/volume1/homelab-backup`, exported to `192.168.4.46`. It isn't mounted in `/etc/fstab`.
 
-TODO: what this export is for, and whether it should be mounted (read-write, for backups) and documented here.
+It was created for nightly backups of the server's `adguard/` and `jellyfin/` folders (tar archives, keeping the last 14). This is **planned, not set up yet**. The mount and backup job will be documented in `docs/08-backups.md` (not written yet).
 
 ## What I learned
 
@@ -92,5 +92,5 @@ TODO: what this export is for, and whether it should be mounted (read-write, for
 ## Next steps
 
 - [ ] Fill in the DSM version and confirm the NFS privilege and squash settings.
-- [ ] Decide what `/volume1/homelab-backup` is for ([above](#second-nfs-export-not-documented)).
-- [ ] TODO: Hyper Backup or another off-NAS backup of the media? SHR protects against a dead drive, not against deletion.
+- [x] Decide what `/volume1/homelab-backup` is for: nightly backups ([above](#second-nfs-export-not-documented)).
+- [ ] Off-NAS backup of the media: not set up yet. Planned later with an external USB drive and Hyper Backup. (SHR protects against a dead drive, not against deletion.)
