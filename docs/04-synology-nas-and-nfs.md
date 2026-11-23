@@ -63,6 +63,10 @@ docker inspect -f '{{range .Mounts}}{{.Destination}} rw={{.RW}}{{"\n"}}{{end}}' 
 
 Checked 2026-11-23: the live mount is `ro`, Jellyfin's `/media` is `rw=false`, and all health checks pass.
 
+![Synology Storage Manager: Storage Pool 1 on SHR with two healthy 2.7 TB drives](screenshots/synology-storage-pool.png)
+
+![NFS permissions on the media share: 192.168.4.46, read only](screenshots/synology-nfs-permissions.png)
+
 ## Problems and fixes
 
 ### No storage pool; old pool data on the drives

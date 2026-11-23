@@ -68,6 +68,10 @@ docker compose ps          # adguard and jellyfin both running
 ./health-check.sh
 ```
 
+![docker ps showing adguard and jellyfin running, jellyfin healthy](screenshots/docker-ps.png)
+
+![health-check.sh with all checks passing](screenshots/health-check-pass.png)
+
 ### Health check
 
 `health-check.sh` is **read-only**. It never starts, stops or restarts anything.

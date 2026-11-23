@@ -60,6 +60,8 @@ Address: 0.0.0.0
 
 The answer should come from `192.168.4.46` and resolve to `0.0.0.0`, which means it's blocked.
 
+![nslookup doubleclick.net from a Windows laptop returning 0.0.0.0 via 192.168.4.46](screenshots/nslookup-doubleclick-blocked.png)
+
 From the server (also checked by health checks 3 and 4):
 
 ```bash
@@ -80,6 +82,14 @@ Checked 2026-11-23: health checks 3 and 4 pass, and port 53 is held on `*:53` (T
 | Average processing time | 84 ms |
 
 Top blocked domains included Roku telemetry (`scribe.logs.roku.com`) and ad/tracking domains.
+
+### Settings screenshots
+
+![AdGuard blocklists: AdGuard DNS filter and OISD Big enabled](screenshots/adguard-blocklists.png)
+
+![AdGuard upstream DNS settings: Cloudflare and Quad9 DoH, parallel requests](screenshots/adguard-upstream-dns.png)
+
+![AdGuard general settings: filtering and browsing security on, 30-day query log](screenshots/adguard-general-settings.png)
 
 ## Problems and fixes
 

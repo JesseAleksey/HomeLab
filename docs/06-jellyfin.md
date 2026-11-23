@@ -43,6 +43,8 @@ ls -l /dev/dri                              # renderD128 present
 
 Checked 2026-11-23: health check 5 passes, and the daily 3 AM library scan is scheduled.
 
+![Jellyfin home page with the Movies and Shows libraries](screenshots/jellyfin-libraries.png)
+
 - TODO: confirm hardware transcoding during playback (*Dashboard → Activity*, or the playback info overlay shows "Transcoding" with VAAPI, and CPU stays low).
 - TODO: which client apps you use (TV, phone, web).
 

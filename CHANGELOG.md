@@ -4,6 +4,7 @@ Dates are local time (US Central). The server's time zone was `Etc/UTC` until 20
 
 ## 2026-11-23
 
+- **Screenshots:** added 9 verification screenshots in `docs/screenshots/` and embedded them under Verification in `docs/03` (docker ps, health check), `docs/04` (storage pool, NFS permissions), `docs/05` (nslookup, blocklists, upstream DNS, general settings) and `docs/06` (libraries). Left out the AdGuard dashboard screenshot because it showed top clients by IP; a cropped version will replace it later.
 - **Synology:** documented the MAC (`00:11:32:44:23:E4`), DSM 7.1.1-42962 Update 9, the static IP `192.168.4.10` set on the Synology to match the eero reservation, and the full NFS rule confirmed in DSM (read only, map all users to admin, async, non-privileged ports and cross-mount denied). (`docs/01`, `docs/04`)
 - **AdGuard DNS settings:** parallel requests to Cloudflare and Quad9 DoH, fallback `1.1.1.1`/`9.9.9.9`, IPv4 and IPv6 bootstrap, private reverse DNS on, 10 s upstream timeout. (`docs/05`)
 - **AdGuard general settings:** browsing security on (replacing eero Secure), parental control and safe search off, query log rotation cut from 90 to 30 days. (`docs/05`)
