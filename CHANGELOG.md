@@ -4,6 +4,7 @@ Dates are local time (US Central). The server's time zone was `Etc/UTC` until 20
 
 ## 2026-11-23
 
+- **Network diagram:** replaced the ASCII diagram in the README with a draw.io diagram (`docs/screenshots/network-diagram.png`), also embedded under Network in `docs/01`. The editable source is `docs/screenshots/network-diagram.drawio`, extracted from the PNG export, which moved from `docs/` to `docs/screenshots/`.
 - **README:** added a Skills demonstrated line under Tools, embedded the AdGuard dashboard screenshot under the headline numbers, and updated those numbers to match the screenshot (65,834 queries from 32 devices, 10,999 blocked (17%), 85 ms average). `docs/05` keeps the earlier 64,219 figures.
 - **Repo cleanup:** stopped tracking the AI assistant's notes file (CLAUDE.md), kept on the server and now in `.gitignore`; renamed `docs/07` to [Version control and tools](docs/07-version-control-and-tools.md) with a short note on how I used an AI assistant; rule references in `docs/05` and `docs/troubleshooting.md` now state the rule itself; added a Tools line to the README.
 - **Doc accuracy fixes:**

@@ -20,6 +20,8 @@ I repurposed the Dell OptiPlex 7010 because I already had it. It's a stopgap: an
 
 Subnet: `192.168.4.0/22`
 
+![Network diagram: eero router (192.168.4.1) connects jaramilloserver (192.168.4.46, AdGuard Home and Jellyfin) and the Synology DS214se (192.168.4.10), which serves /volume1/media to the server over read-only NFS](screenshots/network-diagram.png)
+
 | Device | IP | MAC | Notes |
 |---|---|---|---|
 | eero router | `192.168.4.1` | — | Custom DNS set to `192.168.4.46` |

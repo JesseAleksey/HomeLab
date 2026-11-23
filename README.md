@@ -18,24 +18,9 @@ Skills demonstrated: Linux (Ubuntu Server), Docker Compose, DNS (AdGuard Home, D
 
 Subnet `192.168.4.0/22`.
 
-```
-            Internet
-               │
-       ┌───────┴────────┐
-       │ eero           │ 192.168.4.1
-       │ DNS → .4.46    │
-       └───────┬────────┘
-               │  LAN 192.168.4.0/22
-     ┌─────────┴───────────────────┐
-     │                             │
-┌────┴──────────────────┐   ┌──────┴─────────────┐
-│ jaramilloserver       │   │ Synology DS214se   │
-│ 192.168.4.46 (Wi-Fi)  │   │ 192.168.4.10       │
-│  ├─ AdGuard  :53/8080 │   │  /volume1/media    │
-│  └─ Jellyfin :8096    │◄──┤  (NFS, SHR mirror) │
-│ /mnt/media (NFS, ro)  │   └────────────────────┘
-└───────────────────────┘
-```
+![Network diagram: eero router (192.168.4.1) connects jaramilloserver (192.168.4.46, AdGuard Home and Jellyfin) and the Synology DS214se (192.168.4.10), which serves /volume1/media to the server over read-only NFS](docs/screenshots/network-diagram.png)
+
+Editable source: [network-diagram.drawio](docs/screenshots/network-diagram.drawio) (open at [app.diagrams.net](https://app.diagrams.net))
 
 ## Services
 
