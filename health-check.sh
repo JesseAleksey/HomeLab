@@ -38,6 +38,14 @@ else
   fail "$MEDIA_MOUNT is not mounted"
 fi
 
+# 2b. NAS share mounted read-only (fstab: ro,_netdev)
+media_opts=$(findmnt -no OPTIONS "$MEDIA_MOUNT" 2>/dev/null)
+if grep -qE '(^|,)ro(,|$)' <<<"$media_opts"; then
+  pass "$MEDIA_MOUNT is mounted read-only"
+else
+  fail "$MEDIA_MOUNT is not mounted read-only (options: ${media_opts%%,*})"
+fi
+
 # 3. AdGuard blocks doubleclick.net
 # Default blocking returns 0.0.0.0 / ::; other modes return NXDOMAIN or REFUSED.
 blocked_out=$(dig @"$DNS_SERVER" doubleclick.net A +time=3 +tries=1 2>&1)
