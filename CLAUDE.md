@@ -26,7 +26,9 @@ Subnet: `192.168.4.0/22`
 | Synology DS214se | `192.168.4.10` | NFS export `/volume1/media` |
 | OptiPlex 7010 | `192.168.4.46` | Connected over USB Wi-Fi (`wlx90de8000ec5a`) |
 
-The NFS share `192.168.4.10:/volume1/media` is mounted **read-only** at `/mnt/media` via `/etc/fstab`.
+The NFS share `192.168.4.10:/volume1/media` is **read-only at both levels**:
+- **Host:** mounted at `/mnt/media` with `ro,_netdev` in `/etc/fstab` (backup of the previous version: `/etc/fstab.bak-2026-11-23`).
+- **Container:** bind-mounted into Jellyfin as `/mnt/media:/media:ro` in `docker-compose.yml`.
 
 ## Services
 
