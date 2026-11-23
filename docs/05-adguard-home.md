@@ -137,11 +137,11 @@ Every device loses DNS while AdGuard is down. To get the house back online:
 
 ## What I learned
 
-- Ubuntu's own DNS stub will clash with any DNS server on port 53.
-- Keep the host's resolver independent of the container it runs, or a broken AdGuard can stop you pulling the image that fixes it.
-- Router "security" features can quietly lock DNS settings.
-- AdGuard's admin login is local only. Keep the password in a password manager, and never paste a password into an online hash generator.
-- TODO: add your own notes.
+- DNS filtering blocks by domain name, so it can't stop ads served from the same domain as the content, like YouTube ads.
+- A lot of home network traffic is telemetry. Smart TVs and apps constantly report usage, and about 17% of my household's DNS queries were ads and trackers.
+- Two services can't use the same port. `systemd-resolved` was holding port 53, so I had to disable its stub listener before AdGuard could run.
+- Rate limiting works. Too many wrong passwords locked me out for 12 minutes, which is the same protection that stops brute-force attacks.
+- When one device handles DNS for everyone, it's a single point of failure, so I documented a fallback (switching the eero back to ISP DNS).
 
 ## Next steps
 

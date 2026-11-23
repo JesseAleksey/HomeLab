@@ -104,10 +104,9 @@ The health check only tested that `/mnt/media` was mounted, so it passed while t
 
 ## What I learned
 
-- Host networking is simple but makes port planning mandatory.
-- Pinning by digest means updates only happen when I choose to.
-- A health check only proves what it actually tests.
-- TODO: add your own notes.
+- Docker Compose turns a whole setup into one file that can be backed up, versioned and moved to new hardware.
+- Host networking is simpler for DNS but gives up Docker's port isolation, so the server's firewall and router settings matter more.
+- Pinning image versions prevents surprise upgrades. Updating one service at a time, then running a health check, is safer than updating everything at once.
 
 ## Next steps
 

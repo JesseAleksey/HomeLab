@@ -120,11 +120,10 @@ timedatectl | grep 'Time zone'    # America/Chicago (CST, -0600)
 
 ## What I learned
 
-- On old Dell BIOSes, Load Defaults can lock you into Legacy boot. Match the USB's partition scheme to the boot mode rather than fighting it.
-- AC Recovery = Power On matters for a machine that's the house DNS.
-- Cheap high-capacity USB sticks can lie about their size.
-- sshd uses the first value it reads, and the cloud-init drop-in in `sshd_config.d/` overrides the main `sshd_config`. Check the effective config with `sudo sshd -T`.
-- TODO: add your own notes.
+- The install media has to match the boot mode. When UEFI was greyed out, I had to stay on Legacy and build the USB with MBR instead of GPT.
+- Tools hide things for safety. Rufus hid my USB until I enabled "List USB Hard Drives," and checking drive size before writing kept me from wiping the wrong disk.
+- Linux config can be overridden by files you don't expect. A cloud-init drop-in file controlled SSH password login, and sshd uses the first value it reads.
+- A private key must never leave the machine. When I exposed mine, the right fix was to rotate it: generate a new key and remove the old one from `authorized_keys`.
 
 ## Next steps
 

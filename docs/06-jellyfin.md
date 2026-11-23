@@ -62,10 +62,9 @@ Fix: turned those savers off (table above), so metadata stays in `./jellyfin/con
 
 ## What I learned
 
-- An old iGPU still helps, but check exactly which codecs it supports.
-- With a read-only media share, Jellyfin has to keep all its metadata in its own config folder.
-- NFS and real-time file monitoring don't mix.
-- TODO: add your own notes.
+- Direct play matters more than server power. If the client can play the file as-is, the server barely works.
+- Older integrated graphics limit transcoding. The HD 2500 only handles H.264 through VAAPI, not HEVC.
+- Settings have to match the storage. With a read-only share, Jellyfin can't save artwork or metadata next to the media, and NFS doesn't support real-time file monitoring, so I scheduled a daily scan instead.
 
 ## Next steps
 

@@ -92,11 +92,10 @@ Fix: switch the browser to the account with the Pro plan, then log in again.
 
 ## What I learned
 
-- Creating files on GitHub's web UI and locally at the same time causes pull conflicts. Pick one place to create them.
-- Device-code login is the way to authenticate a headless server.
-- Check which account the browser is signed in to before an OAuth login.
-- A CLAUDE.md with hard rules (like "don't touch AdGuard") makes an assistant safer on a live server.
-- TODO: add your own notes.
+- Check what's being uploaded before every push to a public repo. A `.gitignore` plus `git ls-files` keeps logs and password hashes private.
+- Git conflicts are protective, not broken. "Untracked files would be overwritten" meant git was refusing to destroy my local file.
+- AI tools speed up the work but need supervision. Claude Code guessed wrong when it lacked context, so a `CLAUDE.md` file and reviewing every command made it reliable.
+- Documentation has to match reality. Verifying the live system before writing things down caught real mistakes in my own docs.
 
 ## Next steps
 

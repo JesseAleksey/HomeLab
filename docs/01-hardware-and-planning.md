@@ -70,9 +70,9 @@ Pings of around 220 ms over the USB Wi-Fi adapter.
 
 ## What I learned
 
-- Reusing hardware I already had got everything running fast, but its limits show up quickly (Wi-Fi only, an iGPU with no HEVC support, 8 GB RAM).
-- A DNS server needs a fixed address before anything points at it.
-- TODO: add your own notes.
+- Old hardware is good enough for a home server. An i5-3570 with 8 GB runs DNS and a media server easily; the limits show up in video transcoding, not everyday services.
+- Planning IPs and ports up front saves trouble later. With host networking, two services can't share a port, so a port plan prevents conflicts before they happen.
+- A DNS server needs a fixed address. If its IP changes, the whole house loses internet, so DHCP reservations aren't optional.
 
 ## Next steps
 

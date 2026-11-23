@@ -93,10 +93,9 @@ It was created for nightly backups of the server's `adguard/` and `jellyfin/` fo
 
 ## What I learned
 
-- Making the share read-only in two places (host and container) is belt and braces, but only if both are actually applied.
-- Check the live mount with `findmnt`, not just the docs or fstab.
-- Setting up SHR wipes the drives, even if they still hold old pool data.
-- TODO: add your own notes.
+- RAID is not a backup. SHR protects against a dead drive, not against deleted files or a failed NAS.
+- NFS controls access by IP address instead of a username and password, so the permission rule on the NAS is the main security control.
+- Read-only should be enforced at every layer. My docs said the share was read-only, but the host had it read-write. I only caught it by checking, so I added a health check for it.
 
 ## Next steps
 

@@ -13,6 +13,7 @@ Dates are local time (US Central). The server's time zone was `Etc/UTC` until 20
 - **SSH:** replaced an exposed private key with a new ed25519 key and overwrote `authorized_keys`. Key-only login is planned but not done: `50-cloud-init.conf` still enables password login and overrides `sshd_config`. (`docs/02`)
 - **Jellyfin:** the daily 3 AM library scan is scheduled. Hardware transcoding test and client apps still TODO. (`docs/06`)
 - Added the new problems to `docs/troubleshooting.md`.
+- Replaced the "What I learned" placeholders in `docs/01`–`07` with my own notes.
 - Filled in doc TODOs: the 220 ms ping spike, the fake-capacity USB stick and the first SSH disconnect, the planned use of `/volume1/homelab-backup` for nightly backups (future `docs/08-backups.md`), the planned off-NAS media backup, the eero fallback DNS steps, the daily library scan and the time zone plan.
 - Reorganised the docs: the README is now a short overview, and the details live in `docs/01`–`07`, `docs/troubleshooting.md` and this changelog.
 - **Applied the read-only NAS mount on the host:** `/etc/fstab` changed from `defaults,_netdev` to `ro,_netdev` (backup `/etc/fstab.bak-2026-11-23`). The docs had said `ro`, but the live mount was `rw`. (`b4867a5`)
