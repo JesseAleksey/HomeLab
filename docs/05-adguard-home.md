@@ -83,6 +83,10 @@ Checked 2026-11-23: health checks 3 and 4 pass, and port 53 is held on `*:53` (T
 
 Top blocked domains included Roku telemetry (`scribe.logs.roku.com`) and ad/tracking domains.
 
+![AdGuard dashboard, last 24 hours: 65,834 DNS queries, 10,999 blocked (17%)](screenshots/adguard-dashboard.png)
+
+The screenshot was taken a little later than the table, so its numbers are slightly higher.
+
 ### Settings screenshots
 
 ![AdGuard blocklists: AdGuard DNS filter and OISD Big enabled](screenshots/adguard-blocklists.png)
