@@ -137,6 +137,7 @@ Images are pinned by digest, so `docker compose pull` won't fetch anything new b
 |---|---|---|
 | 1 | Containers | `adguard` and `jellyfin` are both `running` |
 | 2 | NAS mount | `/mnt/media` is a mountpoint |
+| 2b | NAS read-only | `/mnt/media` mount options include `ro` |
 | 3 | Ad blocking | `doubleclick.net` is blocked (`0.0.0.0`, `NXDOMAIN`, `REFUSED`, or empty answer) |
 | 4 | DNS resolution | `google.com` resolves to a real IP via AdGuard |
 | 5 | Jellyfin | `GET /health` returns `Healthy` |
