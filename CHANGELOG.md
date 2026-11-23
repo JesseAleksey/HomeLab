@@ -4,6 +4,7 @@ Dates are local time (US Central). The server's time zone was `Etc/UTC` until 20
 
 ## 2026-11-23
 
+- **README:** added a Skills demonstrated line under Tools, embedded the AdGuard dashboard screenshot under the headline numbers, and updated those numbers to match the screenshot (65,834 queries from 32 devices, 10,999 blocked (17%), 85 ms average). `docs/05` keeps the earlier 64,219 figures.
 - **Repo cleanup:** stopped tracking the AI assistant's notes file (CLAUDE.md), kept on the server and now in `.gitignore`; renamed `docs/07` to [Version control and tools](docs/07-version-control-and-tools.md) with a short note on how I used an AI assistant; rule references in `docs/05` and `docs/troubleshooting.md` now state the rule itself; added a Tools line to the README.
 - **Doc accuracy fixes:**
   - Port 53 is now described as a preventive step: AdGuard never hit `bind: address already in use`, because I disabled the `systemd-resolved` stub listener before starting it. (`docs/05`, `docs/troubleshooting.md`)
