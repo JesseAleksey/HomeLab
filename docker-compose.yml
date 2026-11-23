@@ -1,6 +1,6 @@
 services:
   adguard:
-    image: adguard/adguardhome
+    image: adguard/adguardhome:v1.0.0@sha256:f00a586f0d1caa74f149340bfb225014960310488ffa838406b89256900a96c2
     container_name: adguard
     restart: unless-stopped
     network_mode: host
@@ -9,7 +9,7 @@ services:
       - ./adguard/conf:/opt/adguardhome/conf
 
   jellyfin:
-    image: jellyfin/jellyfin
+    image: jellyfin/jellyfin:12.4@sha256:fea863d0cd9ec445985d9c75fc6ed64e38a1d2766cf0c250a33d553f4fc1b771
     container_name: jellyfin
     restart: unless-stopped
     network_mode: host
