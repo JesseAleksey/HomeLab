@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Guidance for Claude Code when working in this homelab repo.
+Guidance for Claude Code when working in this homelab repo. Setup details and fixes live in `docs/` (index: `docs/troubleshooting.md`); log changes in `CHANGELOG.md`.
 
 ## Rules
 
