@@ -42,6 +42,8 @@ Subnet `192.168.4.0/22`.
 
 Both run in Docker with host networking ([`docker-compose.yml`](docker-compose.yml)). Reserved ports are in the [port plan](docs/01-hardware-and-planning.md#port-plan).
 
+AdGuard's last 24 hours (2026-11-23): **64,219 DNS queries from 32 devices, 10,776 blocked (16.8%)**, 84 ms average processing time ([details](docs/05-adguard-home.md#verification)).
+
 > **AdGuard is the DNS for the whole house.** Don't restart or recreate it casually; see [Updating](docs/03-docker.md#updating).
 
 Check the whole stack (read-only) with `./health-check.sh` ([details](docs/03-docker.md#health-check)).

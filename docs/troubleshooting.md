@@ -10,8 +10,11 @@ Before you change anything, run `./health-check.sh` ([03](03-docker.md#health-ch
 | Rufus doesn't list the USB drive | Install media | [02](02-ubuntu-install.md#rufus-doesnt-show-the-usb-drive) |
 | Corrupted filenames on a big, cheap USB stick | Install media | [02](02-ubuntu-install.md#usb-stick-with-likely-fake-capacity) |
 | First SSH session closes after accepting the host key | SSH | [02](02-ubuntu-install.md#first-ssh-connection-closed-after-accepting-the-host-key) |
+| SSH private key exposed | SSH | [02](02-ubuntu-install.md#private-ssh-key-exposed) |
+| Password login still works over SSH | SSH | [02](02-ubuntu-install.md#ssh-key-only-login-planned) |
 | High ping (~220 ms) on the server | Network | [01](01-hardware-and-planning.md#high-latency-over-usb-wi-fi) |
 | AdGuard: `bind: address already in use` on port 53 | DNS | [05](05-adguard-home.md#port-53-already-in-use-systemd-resolved) |
+| AdGuard: forgot admin password / HTTP 429 login lockout | DNS | [05](05-adguard-home.md#forgot-the-admin-password-login-rate-limited) |
 | eero Custom DNS greyed out | Router | [05](05-adguard-home.md#eero-custom-dns-greyed-out) |
 | Synology: can't create a shared folder; old pool data on the drives | NAS | [04](04-synology-nas-and-nfs.md#no-storage-pool-old-pool-data-on-the-drives) |
 | `/mnt/media` is `rw` though the docs say `ro` / health check 2b fails | NAS | [04](04-synology-nas-and-nfs.md#docs-said-read-only-but-the-host-mount-was-read-write) |

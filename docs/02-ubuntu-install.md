@@ -90,15 +90,46 @@ ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub
 
 Cause unknown. It happened once, on the first connection after install, and retrying worked.
 
+### Private SSH key exposed
+
+I accidentally exposed my SSH private key.
+
+Fix (2026-11-23):
+
+1. Deleted the exposed private key.
+2. Generated a new ed25519 key (no passphrase): `ssh-keygen -t ed25519`.
+3. Overwrote `~/.ssh/authorized_keys` on the server with only the new public key, so the old key no longer works.
+4. Backed up the new key in Bitwarden.
+
+Password login is still enabled, so key-only login is the next step ([below](#ssh-key-only-login-planned)).
+
+## SSH key-only login (planned)
+
+Not done yet. `sudo sshd -T | grep -i passwordauthentication` shows `passwordauthentication yes`, which comes from `/etc/ssh/sshd_config.d/50-cloud-init.conf`.
+
+That drop-in sets `PasswordAuthentication yes`. sshd uses the **first** value it reads for each setting, and it reads the `sshd_config.d/` drop-ins before the rest of the main `sshd_config`, so the cloud-init file wins. To turn password login off, change it in `50-cloud-init.conf` (after a backup), not just in `sshd_config`. Then validate with `sudo sshd -t`, reload ssh, and confirm that key login still works from a second session before closing the first.
+
+## Time zone
+
+Set to `America/Chicago` on 2026-11-23, so logs and commits show local time:
+
+```bash
+sudo timedatectl set-timezone America/Chicago
+timedatectl | grep 'Time zone'    # America/Chicago (CST, -0600)
+```
+
 ## What I learned
 
 - On old Dell BIOSes, Load Defaults can lock you into Legacy boot. Match the USB's partition scheme to the boot mode rather than fighting it.
 - AC Recovery = Power On matters for a machine that's the house DNS.
 - Cheap high-capacity USB sticks can lie about their size.
+- sshd uses the first value it reads, and the cloud-init drop-in in `sshd_config.d/` overrides the main `sshd_config`. Check the effective config with `sudo sshd -T`.
 - TODO: add your own notes.
 
 ## Next steps
 
 - [ ] Test or throw away the suspect "1 TB" USB stick.
-- [ ] TODO: SSH hardening (key-only login), if you want it.
+- [x] Replace the exposed SSH key ([above](#private-ssh-key-exposed)).
+- [ ] SSH key-only login: set `PasswordAuthentication no` in `50-cloud-init.conf` ([above](#ssh-key-only-login-planned)).
+- [x] Set the time zone to `America/Chicago` ([above](#time-zone)).
 - [ ] Reinstall on the HP ProDesk 600 G6 when it's ready ([01](01-hardware-and-planning.md#next-steps)).

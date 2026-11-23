@@ -52,7 +52,7 @@ git ls-files              # only the files listed above
 
 Checked 2026-11-23: `gh` is logged in over HTTPS, Claude Code 2.1.330, and the commit email is a no-reply address.
 
-The server's time zone is `Etc/UTC`, so commit times show UTC (`+0000`), not Central time.
+The server's time zone is `America/Chicago` (set 2026-11-23, see [02](02-ubuntu-install.md#time-zone)), so new commits show local time (`-0600` in winter). Commits made before the change show UTC (`+0000`).
 
 ### Screenshots
 
@@ -100,5 +100,5 @@ Fix: switch the browser to the account with the Pro plan, then log in again.
 
 ## Next steps
 
-- [ ] Set the server's time zone to `America/Chicago` for local commit times. I'll run this myself: `sudo timedatectl set-timezone America/Chicago`.
+- [x] Set the server's time zone to `America/Chicago` for local commit times (`sudo timedatectl set-timezone America/Chicago`).
 - [ ] Keep [CHANGELOG.md](../CHANGELOG.md) updated with each change.

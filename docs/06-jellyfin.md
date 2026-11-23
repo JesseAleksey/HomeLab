@@ -31,7 +31,8 @@ Stream the NAS media library to devices in the house, with hardware transcoding 
    | Trickplay image extraction | Off | Too heavy for the i5-3570 |
    | Chapter image extraction | Off | Too heavy for the i5-3570 |
 
-4. *Dashboard → Playback → Transcoding*: hardware acceleration **VAAPI**, device `/dev/dri/renderD128`. Enable hardware decoding for **H.264** only and leave **HEVC** unticked.
+4. *Dashboard → Scheduled Tasks → Scan media library*: add a daily trigger at **3 AM**, since real-time monitoring is off.
+5. *Dashboard → Playback → Transcoding*: hardware acceleration **VAAPI**, device `/dev/dri/renderD128`. Enable hardware decoding for **H.264** only and leave **HEVC** unticked.
 
 ## Verification
 
@@ -40,7 +41,7 @@ curl -fsS http://localhost:8096/health     # Healthy
 ls -l /dev/dri                              # renderD128 present
 ```
 
-Checked 2026-11-23: health check 5 passes.
+Checked 2026-11-23: health check 5 passes, and the daily 3 AM library scan is scheduled.
 
 - TODO: confirm hardware transcoding during playback (*Dashboard → Activity*, or the playback info overlay shows "Transcoding" with VAAPI, and CPU stays low).
 - TODO: which client apps you use (TV, phone, web).
@@ -69,5 +70,5 @@ Fix: turned those savers off (table above), so metadata stays in `./jellyfin/con
 ## Next steps
 
 - [ ] Confirm hardware transcoding and list client apps (TODOs above).
-- [ ] Schedule Jellyfin's **Scan media library** task daily at 3 AM in *Dashboard → Scheduled Tasks*, since real-time monitoring is off.
+- [x] Schedule Jellyfin's **Scan media library** task daily at 3 AM in *Dashboard → Scheduled Tasks*, since real-time monitoring is off.
 - [ ] Revisit HEVC and trickplay on the HP ProDesk 600 G6.

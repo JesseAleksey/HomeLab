@@ -16,9 +16,23 @@ Block ads and trackers for every device in the house at the DNS level, by making
 |---|---|
 | Blocklists (enabled) | AdGuard DNS filter, OISD Big (`https://big.oisd.nl`) |
 | Blocklists (disabled) | AdAway |
-| Upstream DNS | Cloudflare DoH, Quad9 DoH |
-| Upstream mode | TODO: check *Settings → DNS settings → Upstream DNS servers* (load-balancing, parallel, or fastest IP) |
-| Bootstrap DNS | `1.0.0.1`, `1.1.1.1` |
+| Upstream DNS (DoH) | `https://cloudflare-dns.com/dns-query`, `https://dns.quad9.net/dns-query` |
+| Upstream mode | Parallel requests |
+| Fallback DNS | `1.1.1.1`, `9.9.9.9` |
+| Bootstrap DNS | `1.0.0.1`, `1.1.1.1`, `2606:4700:4700::1001`, `2606:4700:4700::1111` |
+| Private reverse DNS resolvers | Enabled |
+| Upstream timeout | 10 s |
+
+General settings:
+
+| Setting | Value |
+|---|---|
+| Browsing security (malware/phishing) | Enabled. Replaces the eero Secure protection I turned off ([below](#eero-custom-dns-greyed-out)) |
+| Parental control | Off |
+| Safe search | Off |
+| Query log rotation | 30 days (changed from 90, to limit disk use and privacy exposure) |
+
+The admin login is a local username whose bcrypt password hash is stored in `AdGuardHome.yaml`. AdGuard has no email address or online account, so there's no "forgot password" option ([below](#forgot-the-admin-password-login-rate-limited)).
 
 The settings above were not read from `adguard/conf`, which holds credentials and is never put into docs (CLAUDE.md Rule 3).
 
@@ -29,7 +43,8 @@ The settings above were not read from `adguard/conf`, which holds credentials an
 3. Open `http://192.168.4.46:3000` for the first-run wizard. Set the admin UI to port **8080** and DNS to port **53**.
 4. In the admin UI (`http://192.168.4.46:8080`):
    - *Filters → DNS blocklists*: enable AdGuard DNS filter, add OISD Big, disable AdAway.
-   - *Settings → DNS settings*: set the upstreams and bootstrap DNS from the table above.
+   - *Settings → DNS settings*: set the upstreams, upstream mode, fallback, bootstrap, private reverse DNS and timeout from the table above.
+   - *Settings → General settings*: enable browsing security, leave parental control and safe search off, set query log rotation to 30 days.
 5. In the eero app, turn off **all eero Secure features** ([below](#eero-custom-dns-greyed-out)), then set **Custom DNS** to `192.168.4.46`.
 
 ## Verification
@@ -54,6 +69,17 @@ sudo ss -tulpn | grep ':53 '               # only AdGuard listening
 ```
 
 Checked 2026-11-23: health checks 3 and 4 pass, and port 53 is held on `*:53` (TCP and UDP).
+
+### Dashboard results (last 24 hours, 2026-11-23)
+
+| Metric | Value |
+|---|---|
+| DNS queries | 64,219 |
+| Blocked | 10,776 (16.8%) |
+| Clients | 32 devices |
+| Average processing time | 84 ms |
+
+Top blocked domains included Roku telemetry (`scribe.logs.roku.com`) and ad/tracking domains.
 
 ## Problems and fixes
 
@@ -81,7 +107,26 @@ Checked 2026-11-23: the override file is in place and `/etc/resolv.conf` → `/r
 
 The Custom DNS option in the eero app couldn't be changed.
 
-Fix: turn off **all eero Secure features** (eero Plus ad blocking and filtering use their own DNS). After that, Custom DNS can be set.
+Fix: turn off **all eero Secure features** (eero Plus ad blocking and filtering use their own DNS). After that, Custom DNS can be set. AdGuard's browsing security now covers the malware/phishing protection eero Secure used to provide.
+
+### Forgot the admin password; login rate-limited
+
+I forgot the admin password, and repeated attempts hit AdGuard's login rate limit (HTTP 429, blocked for about 12 minutes). AdGuard has no email or account recovery: the login is a local username with a password hash in `AdGuardHome.yaml`.
+
+Fix (2026-11-23):
+
+1. Generated a new bcrypt hash **locally**, not with an online generator:
+   ```bash
+   htpasswd -B -C 10 -n <username>    # prints <username>:<hash>
+   ```
+2. Backed up `AdGuardHome.yaml`.
+3. Stopped AdGuard. **This is a brief house-wide DNS outage** (CLAUDE.md Rule 1).
+4. Replaced the user's `password:` hash in `AdGuardHome.yaml`.
+5. Started AdGuard and confirmed with `./health-check.sh`.
+
+The restart also clears the rate-limit lockout.
+
+Never commit `AdGuardHome.yaml` or its backup. They live in `adguard/`, which is git-ignored (CLAUDE.md Rule 3).
 
 ## If the server is down
 
@@ -95,10 +140,11 @@ Every device loses DNS while AdGuard is down. To get the house back online:
 - Ubuntu's own DNS stub will clash with any DNS server on port 53.
 - Keep the host's resolver independent of the container it runs, or a broken AdGuard can stop you pulling the image that fixes it.
 - Router "security" features can quietly lock DNS settings.
+- AdGuard's admin login is local only. Keep the password in a password manager, and never paste a password into an online hash generator.
 - TODO: add your own notes.
 
 ## Next steps
 
-- [ ] Fill in the upstream mode.
+- [x] Fill in the upstream mode (parallel requests).
 - [x] A fallback DNS plan for when the server is down: switch the eero back to ISP DNS ([steps](#if-the-server-is-down)).
 - [ ] Put the admin UI behind Nginx Proxy Manager (80/443) once it's set up.

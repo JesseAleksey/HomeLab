@@ -13,7 +13,11 @@ Store media on the Synology DS214se with redundancy, and give the server read-on
   - **Host:** `/etc/fstab` mounts it at `/mnt/media` with `ro,_netdev`. The previous fstab is saved as `/etc/fstab.bak-2026-11-23`.
   - **Container:** Jellyfin gets it as `/mnt/media:/media:ro` ([`docker-compose.yml`](../docker-compose.yml)).
 
-DSM version: TODO.
+| Setting | Value |
+|---|---|
+| DSM version | 7.1.1-42962 Update 9 |
+| IP | `192.168.4.10`, set manually (static) in DSM, matching the eero DHCP reservation |
+| MAC | `00:11:32:44:23:E4` |
 
 ## Steps
 
@@ -27,8 +31,13 @@ DSM version: TODO.
    | Field | Value |
    |---|---|
    | Hostname or IP | `192.168.4.46` |
-   | Privilege | Read-only (TODO: confirm in DSM) |
-   | Squash | Map all users to admin (TODO: confirm in DSM) |
+   | Privilege | Read only |
+   | Squash | Map all users to admin |
+   | Asynchronous | Yes |
+   | Allow connections from non-privileged ports | No (Denied) |
+   | Allow users to access mounted subfolders (cross-mount) | No (Denied) |
+
+   Confirmed in DSM on 2026-11-23.
 
 ### On the server
 
@@ -91,6 +100,6 @@ It was created for nightly backups of the server's `adguard/` and `jellyfin/` fo
 
 ## Next steps
 
-- [ ] Fill in the DSM version and confirm the NFS privilege and squash settings.
+- [x] Fill in the DSM version and confirm the NFS rule in DSM ([above](#on-the-synology-dsm)).
 - [x] Decide what `/volume1/homelab-backup` is for: nightly backups ([above](#second-nfs-export-not-documented)).
 - [ ] Off-NAS backup of the media: not set up yet. Planned later with an external USB drive and Hyper Backup. (SHR protects against a dead drive, not against deletion.)

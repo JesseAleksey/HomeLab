@@ -23,7 +23,7 @@ Subnet: `192.168.4.0/22`
 | Device | IP | MAC | Notes |
 |---|---|---|---|
 | eero router | `192.168.4.1` | — | Custom DNS set to `192.168.4.46` |
-| Synology DS214se | `192.168.4.10` | TODO | DHCP reservation; NFS server |
+| Synology DS214se | `192.168.4.10` | `00:11:32:44:23:E4` | DHCP reservation, and the same IP set as static on the Synology itself; NFS server |
 | OptiPlex 7010 (`jaramilloserver`) | `192.168.4.46` | `90:de:80:00:ec:5a` (Wi-Fi) | DHCP reservation; AdGuard Home + Jellyfin |
 
 ### Port plan
@@ -44,7 +44,7 @@ Both containers use `network_mode: host`, so they bind straight to the host's po
 ## Steps
 
 1. Pick a host and a static address plan (table above).
-2. In the eero app, add DHCP reservations: `jaramilloserver` → `192.168.4.46` (MAC `90:de:80:00:ec:5a`), Synology → `192.168.4.10`. The server is the house DNS, so its address must never change.
+2. In the eero app, add DHCP reservations: `jaramilloserver` → `192.168.4.46` (MAC `90:de:80:00:ec:5a`), Synology → `192.168.4.10` (MAC `00:11:32:44:23:E4`). The Synology also has `192.168.4.10` set manually as a static IP in DSM, matching the reservation ([04](04-synology-nas-and-nfs.md#what-i-built)). The server is the house DNS, so its address must never change.
 3. Reserve ports for planned services before installing anything ([port plan](#port-plan)).
 
 ## Verification
