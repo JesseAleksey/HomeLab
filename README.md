@@ -2,9 +2,9 @@
 
 Self-hosted DNS ad-blocking and media streaming on a repurposed Dell OptiPlex, with media stored on a Synology NAS.
 
-Tools: Docker, Git/GitHub, and Claude Code as an AI assistant for drafting configs and docs. Every change was reviewed and verified on the live system.
-
 Skills demonstrated: Linux (Ubuntu Server), Docker Compose, DNS (AdGuard Home, DNS over HTTPS), DHCP reservations, NFS, RAID (Synology SHR), SSH key management, Bash scripting, Git/GitHub, troubleshooting and documentation.
+
+Tools: Docker, Git/GitHub, and Claude Code as an AI assistant for drafting configs and docs. Every change was reviewed and verified on the live system.
 
 ## Hardware
 
