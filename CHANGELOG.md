@@ -16,7 +16,10 @@ Dates are local time (US Central). The server's time zone was `Etc/UTC` until 20
   - **Jellyfin** recreated with `data:/data:ro`; `/data/media/movies` and `/data/media/tv` added to the Movies and Shows libraries next to the existing `/media` paths (backups `options.xml.bak-2026-11-28`).
   - **VPN verified:** with NordVPN service credentials in the git-ignored `vpn.env`, gluetun connects over OpenVPN and qBittorrent's public address is the VPN exit, not the home address. Kill switch tested by taking `tun0` down inside gluetun: qBittorrent could not reach the internet by name or by address until gluetun restored the tunnel (about 30 s).
   - **qBittorrent:** save path `/data/torrents`, bound to `tun0`, categories `movies` and `tv`, web UI on 8090. Requests from the Docker bridge (`172.30.0.0/24`, i.e. the server itself) skip the login so Radarr and Sonarr can connect; LAN clients still need the password. In qBittorrent 5.3 these settings live in the `[WebUI]` section of `qBittorrent.conf`, not under `[Preferences]`. Added as the download client in Radarr and Sonarr.
-  - **Still TODO:** indexers in Prowlarr; a login on each new app; Bazarr languages and providers.
+  - **Instant library updates:** Radarr and Sonarr notify Jellyfin on import, upgrade, rename and delete (Connect > Emby/Jellyfin, with a dedicated Jellyfin API key named `Radarr-Sonarr`), so new files show up without waiting for the 3 AM scan.
+  - **JellyBridge:** sync enabled, mixed library `Discover` created in Jellyfin on `/config/jellybridge`; the first sync from Seerr completed.
+  - **Bazarr:** connected to Sonarr and Radarr; default language profile "English + Spanish" for new series and movies; only the embedded-subtitles provider is on so far.
+  - **Still TODO:** indexers in Prowlarr; a login on each new app; more subtitle providers in Bazarr.
 - **NAS:** fixed the `homelab-backup` NFS rule (`192.168.4.46` to `192.168.68.81`), closing the leftover noted on 2026-11-27.
 - **Port plan:** 5055 (Seerr), 6767 (Bazarr), 7878 (Radarr), 8090 (qBittorrent), 8989 (Sonarr) and 9696 (Prowlarr) are now in use.
 
