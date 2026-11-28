@@ -15,6 +15,14 @@ Thumbs.db
 # Docker app data (logs, caches, password hashes)
 adguard/
 jellyfin/
+seerr/
+bazarr/
+sonarr/
+radarr/
+prowlarr/
+qbittorrent/
+gluetun/
+vpn.env
 
 # Local assistant notes (kept on the server, not published)
 CLAUDE.md

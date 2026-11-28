@@ -2,6 +2,37 @@
 
 Dates are local time (US Central). The server's time zone was `Etc/UTC` until 2026-11-23, so commits before then show UTC; later commits show Central time.
 
+## 2026-11-28
+
+- **Seerr added** as a third container (`seerr`, port 5055, host networking), pinned to `v3.5.2` by digest. Seerr is the merged successor to Jellyseerr and Overseerr. Data lives in `seerr/`, which is git-ignored. Started with `docker compose up -d --no-deps seerr`, so AdGuard and Jellyfin were not restarted. First-run setup done: signed in with the Jellyfin admin account, Movies and Shows libraries enabled, no Radarr/Sonarr yet.
+- **Jellyfin plugin repositories:** added JellyBridge (`kinggeorges12/JellyBridge`), Jellyfin Enhanced (`n00bcodr/jellyfin-plugins`, version 12 manifest) and Intro Skipper (`intro-skipper.org`) to `system.xml`, after checking each catalog lists builds for Jellyfin 12.x. Installed JellyBridge `5.2.12.0`, Jellyfin Enhanced `12.17.0.0` and Intro Skipper `12.0.8.0` by unpacking the release zips into `jellyfin/config/plugins/` after verifying each against the MD5 in its catalog; all three load as Active. JellyBridge is pointed at Seerr (`http://localhost:5055`, API key from Seerr, working folder `/config/jellybridge`); its discover library still has to be created from the plugin page.
+- **Jellyfin transcoding:** hardware decoding now covers MPEG-2 and VC-1 as well as H.264 (all supported by the HD 2500 over VAAPI); transcode throttling and segment deletion turned on. Backups: `encoding.xml.bak-2026-11-28` and `system.xml.bak-2026-11-28` in `jellyfin/config/config/`. Jellyfin restarted once.
+- **AdGuard DNS cache** (changed in the admin UI on 2026-11-27): cache size 4 MB to 32 MB, optimistic caching on. Upstreams unchanged (Cloudflare and Quad9 DoH, parallel); a short trial of plain `1.1.1.1`/`9.9.9.9` caused 10-second timeouts on about 3% of lookups and was reverted.
+- **Deco:** firmware updated on all five units (BE11000 `1.0.2` to `1.3.6`, W2400 `1.5.1` to `1.5.2`). DHCP Secondary DNS set to `1.1.1.1` as a fallback, which lets devices bypass AdGuard some of the time; remove it to restore AdGuard-only DNS.
+- **SSH:** added a second authorised key for the admin PC (`~/.ssh/authorized_keys`).
+- **Download automation stack added** to `docker-compose.yml`, all images pinned by digest: Gluetun (NordVPN) + qBittorrent `5.3.1`, Prowlarr `3.1.0`, Radarr `7.0.3`, Sonarr `4.0.20`, Bazarr `1.6.2`. Only qBittorrent is behind the VPN (it shares gluetun's network); everything else stays on host networking. Each service was started with `docker compose up -d --no-deps <name>`, so AdGuard was never restarted.
+  - **New NAS share `data`** (`/volume1/data`, NFS read-write for `192.168.68.81`, map all users to admin), mounted by Docker as the named volume `data` at `/data`. Downloads go to `/data/torrents`, the library to `/data/media`, on one mount so imports are hardlinks. Tested: a file linked from `torrents/` to `media/` shares one inode with link count 2.
+  - **Wiring done over the apps' APIs:** Radarr and Sonarr root folders, Prowlarr synced to both, Seerr sending requests to both (HD-1080p profile).
+  - **Jellyfin** recreated with `data:/data:ro`; `/data/media/movies` and `/data/media/tv` added to the Movies and Shows libraries next to the existing `/media` paths (backups `options.xml.bak-2026-11-28`).
+  - **VPN verified:** with NordVPN service credentials in the git-ignored `vpn.env`, gluetun connects over OpenVPN and qBittorrent's public address is the VPN exit, not the home address. Kill switch tested by taking `tun0` down inside gluetun: qBittorrent could not reach the internet by name or by address until gluetun restored the tunnel (about 30 s).
+  - **qBittorrent:** save path `/data/torrents`, bound to `tun0`, categories `movies` and `tv`, web UI on 8090. Requests from the Docker bridge (`172.30.0.0/24`, i.e. the server itself) skip the login so Radarr and Sonarr can connect; LAN clients still need the password. In qBittorrent 5.3 these settings live in the `[WebUI]` section of `qBittorrent.conf`, not under `[Preferences]`. Added as the download client in Radarr and Sonarr.
+  - **Still TODO:** indexers in Prowlarr; a login on each new app; Bazarr languages and providers.
+- **NAS:** fixed the `homelab-backup` NFS rule (`192.168.4.46` to `192.168.68.81`), closing the leftover noted on 2026-11-27.
+- **Port plan:** 5055 (Seerr), 6767 (Bazarr), 7878 (Radarr), 8090 (qBittorrent), 8989 (Sonarr) and 9696 (Prowlarr) are now in use.
+
+## 2026-11-27
+
+- **Router migration: eero → TP-Link Deco.** Subnet `192.168.4.0/22` → `192.168.68.0/22`, router `192.168.68.1`.
+  - **Server:** `192.168.4.46` over USB Wi-Fi (`wlx90de8000ec5a`) → `192.168.68.81` over wired Ethernet (`eno1`, MAC `34:17:eb:b9:2e:09`), with a DHCP reservation in the Deco. (`docs/01`, `docs/02`)
+  - **Synology:** `192.168.4.10` → `192.168.68.2`, with a DHCP reservation in the Deco. (`docs/01`, `docs/04`)
+  - **Router DNS:** the Deco's DHCP Server Primary DNS is `192.168.68.81` (AdGuard), and IPv6 is off so devices can't bypass AdGuard over IPv6. Replaces the eero Custom DNS setup, which is kept in the docs as history. (`docs/05`, `docs/troubleshooting.md`)
+  - **Fallback DNS steps** now use the Deco app. (`docs/03`, `docs/05`, `docs/troubleshooting.md`)
+  - **Server fixes after the swap:** the server had no IP because `eno1` wasn't in netplan. Added `/etc/netplan/60-ethernet.yaml` (`dhcp4: true`), set the Wi-Fi to `optional: true` in `00-installer-config.yaml`, changed the Synology NFS rule on `media` to `192.168.68.81`, and changed the NAS IP in `/etc/fstab` to `192.168.68.2` (backup `/etc/fstab.bak-2026-11-27`), then remounted. (`docs/01`, `docs/04`, `docs/troubleshooting.md`)
+  - **`health-check.sh`:** `DNS_SERVER` default changed to `192.168.68.81`. (`docs/03`)
+  - **Network diagram:** updated the draw.io source with the new router, IPs and wired link.
+  - Updated all IPs in the README and `docs/01`–`06`. Screenshots taken before the move still show the old IPs and are labelled as such.
+- **Known leftover:** the NAS's `/volume1/homelab-backup` NFS export still lists the old server IP `192.168.4.46`. It isn't mounted yet. (`docs/04`)
+
 ## 2026-11-23
 
 - **README:** moved the Skills demonstrated line above the Tools line.

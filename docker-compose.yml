@@ -19,3 +19,126 @@ services:
       - ./jellyfin/config:/config
       - ./jellyfin/cache:/cache
       - /mnt/media:/media:ro
+      - data:/data:ro
+
+  seerr:
+    image: ghcr.io/seerr-team/seerr:v3.5.2@sha256:aadee014b40e28cf9aa4928bc9d1183a6eb08f8c44d543cddc9efdcb16549be2
+    container_name: seerr
+    init: true
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - TZ=America/Chicago
+      - PORT=5055
+    volumes:
+      - ./seerr/config:/app/config
+
+  # --- Download automation -------------------------------------------------
+  # Only qBittorrent sits behind the VPN. It shares gluetun's network, so it
+  # has no route to the internet except the tunnel (built-in kill switch).
+  gluetun:
+    image: qmcgaw/gluetun:latest@sha256:6d21823e204e99adbb0aa811105504514d16150cc5299f443f191c28792fcf4b
+    container_name: gluetun
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    env_file:
+      - ./vpn.env
+    environment:
+      - VPN_SERVICE_PROVIDER=nordvpn
+      - VPN_TYPE=openvpn
+      - SERVER_COUNTRIES=United States
+      - FIREWALL_OUTBOUND_SUBNETS=172.30.0.0/24,192.168.68.0/22
+      - TZ=America/Chicago
+    ports:
+      - "8090:8090"   # qBittorrent web UI
+    volumes:
+      - ./gluetun:/gluetun
+    networks:
+      - vpn
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:5.3.1@sha256:1fa2f9692501f27ce51c4fffd771d63ec38f1163cb648941c324344b7c5a3915
+    container_name: qbittorrent
+    restart: unless-stopped
+    network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_healthy
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Chicago
+      - WEBUI_PORT=8090
+    volumes:
+      - ./qbittorrent:/config
+      - data:/data
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:3.1.0@sha256:2806c9b763810589c42157730d547c293639e55c7610e9f5069314854639ec48
+    container_name: prowlarr
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Chicago
+    volumes:
+      - ./prowlarr:/config
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:7.0.3@sha256:044788f5508b7f67a3e0368cdd142c77c4d4cd5aec2efaba53e1a68b6b6231e7
+    container_name: radarr
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Chicago
+    volumes:
+      - ./radarr:/config
+      - data:/data
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:4.0.20@sha256:5c943771636f8f13b833efc0eae81b9373737435a262503a29157842c052ed0b
+    container_name: sonarr
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Chicago
+    volumes:
+      - ./sonarr:/config
+      - data:/data
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:1.6.2@sha256:b3db4247d3afa0c68bc5aa311bedd67b1caf4b3eabc3a85577682970435d5013
+    container_name: bazarr
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Chicago
+    volumes:
+      - ./bazarr:/config
+      - data:/data
+
+networks:
+  vpn:
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24
+
+# One NAS share holds both downloads and the library, mounted once as /data in
+# every container, so finished downloads are hardlinked instead of copied.
+volumes:
+  data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=192.168.68.2,rw,nfsvers=3,hard,noatime"
+      device: ":/volume1/data"
