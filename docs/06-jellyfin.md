@@ -17,7 +17,7 @@ Stream the NAS media library to devices in the house, with hardware transcoding 
 
 ## Steps
 
-1. `docker compose up -d jellyfin`, then open `http://192.168.4.46:8096` and complete the setup wizard.
+1. `docker compose up -d jellyfin`, then open `http://192.168.68.81:8096` and complete the setup wizard.
 2. Add the libraries above.
 3. In each library's settings, turn off everything that writes to the media folders or overloads this CPU:
 

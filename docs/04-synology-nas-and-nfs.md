@@ -8,7 +8,7 @@ Store media on the Synology DS214se with redundancy, and give the server read-on
 
 - Storage pool: **SHR** with 1-drive fault tolerance on 2 × 3 TB drives (in effect a mirror).
 - **Volume 1**, ext4 → `/volume1`.
-- Shared folder `media`, exported over NFS to `192.168.4.46` only.
+- Shared folder `media`, exported over NFS to `192.168.68.81` only.
 - Read-only at both levels:
   - **Host:** `/etc/fstab` mounts it at `/mnt/media` with `ro,_netdev`. The previous fstab is saved as `/etc/fstab.bak-2026-11-23`.
   - **Container:** Jellyfin gets it as `/mnt/media:/media:ro` ([`docker-compose.yml`](../docker-compose.yml)).
@@ -16,7 +16,7 @@ Store media on the Synology DS214se with redundancy, and give the server read-on
 | Setting | Value |
 |---|---|
 | DSM version | 7.1.1-42962 Update 9 |
-| IP | `192.168.4.10`, set manually (static) in DSM, matching the eero DHCP reservation |
+| IP | `192.168.68.2`, DHCP reservation in the Deco (since 2026-11-27; on the eero it was `192.168.4.10`, also set as static in DSM) |
 | MAC | `00:11:32:44:23:E4` |
 
 ## Steps
@@ -30,20 +30,20 @@ Store media on the Synology DS214se with redundancy, and give the server read-on
 
    | Field | Value |
    |---|---|
-   | Hostname or IP | `192.168.4.46` |
+   | Hostname or IP | `192.168.68.81` |
    | Privilege | Read only |
    | Squash | Map all users to admin |
    | Asynchronous | Yes |
    | Allow connections from non-privileged ports | No (Denied) |
    | Allow users to access mounted subfolders (cross-mount) | No (Denied) |
 
-   Confirmed in DSM on 2026-11-23.
+   Confirmed in DSM on 2026-11-23. The IP was changed from `192.168.4.46` to `192.168.68.81` on 2026-11-27 after the router swap.
 
 ### On the server
 
 1. Add to `/etc/fstab`:
    ```
-   192.168.4.10:/volume1/media /mnt/media nfs ro,_netdev 0 0
+   192.168.68.2:/volume1/media /mnt/media nfs ro,_netdev 0 0
    ```
 2. Mount it:
    ```bash
@@ -54,18 +54,20 @@ Store media on the Synology DS214se with redundancy, and give the server read-on
 ## Verification
 
 ```bash
-showmount -e 192.168.4.10            # /volume1/media exported to 192.168.4.46
+showmount -e 192.168.68.2            # /volume1/media exported to 192.168.68.81
 findmnt -no OPTIONS /mnt/media       # starts with "ro,"
 touch /mnt/media/.rw-test            # should fail: Read-only file system
 docker inspect -f '{{range .Mounts}}{{.Destination}} rw={{.RW}}{{"\n"}}{{end}}' jellyfin   # /media rw=false
 ./health-check.sh                    # checks 2 and 2b pass
 ```
 
-Checked 2026-11-23: the live mount is `ro`, Jellyfin's `/media` is `rw=false`, and all health checks pass.
+Checked 2026-11-23: the live mount is `ro`, Jellyfin's `/media` is `rw=false`, and all health checks pass. On 2026-11-27, `/etc/fstab` and the export list show the new IPs.
 
 ![Synology Storage Manager: Storage Pool 1 on SHR with two healthy 2.7 TB drives](screenshots/synology-storage-pool.png)
 
-![NFS permissions on the media share: 192.168.4.46, read only](screenshots/synology-nfs-permissions.png)
+![NFS permissions on the media share: 192.168.4.46, read only (before the 2026-11-27 IP change)](screenshots/synology-nfs-permissions.png)
+
+This screenshot was taken before the router swap; the rule now uses `192.168.68.81`.
 
 ## Problems and fixes
 
@@ -94,7 +96,7 @@ The `sed` only changes the media line. The remount made the live mount read-only
 
 ### Second NFS export not documented
 
-`showmount -e 192.168.4.10` also lists `/volume1/homelab-backup`, exported to `192.168.4.46`. It isn't mounted in `/etc/fstab`.
+`showmount -e 192.168.68.2` also lists `/volume1/homelab-backup`. It isn't mounted in `/etc/fstab`. As of 2026-11-27 this export still lists the old server IP `192.168.4.46`; change it to `192.168.68.81` before setting up backups.
 
 It was created for nightly backups of the server's `adguard/` and `jellyfin/` folders (tar archives, keeping the last 14). This is **planned, not set up yet**. The mount and backup job will be documented in `docs/08-backups.md` (not written yet).
 

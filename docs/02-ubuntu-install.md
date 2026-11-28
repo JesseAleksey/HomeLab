@@ -9,7 +9,7 @@ Get a clean, headless Ubuntu Server on the OptiPlex 7010 that I can manage over 
 - Ubuntu Server 26.04.1 LTS (standard, not minimized), Legacy BIOS boot.
 - Whole SanDisk SSD (111.8 GiB) as one ext4 root partition, without LVM.
 - Hostname `jaramilloserver`, user `jesse_j`, OpenSSH server.
-- Wi-Fi configured in the installer through the USB adapter (`wlx90de8000ec5a`).
+- Wi-Fi configured in the installer through the USB adapter (`wlx90de8000ec5a`). Since 2026-11-27 the server uses wired Ethernet (`eno1`) and the Wi-Fi is `optional: true` ([01](01-hardware-and-planning.md#no-ip-after-the-router-swap-eno1-not-in-netplan)).
 
 ## Steps
 
@@ -43,7 +43,7 @@ Boot from the USB with **F12** (one-time boot menu), then:
 
 ### 4. First SSH login
 
-From another machine: `ssh jesse_j@192.168.4.46`. Before you accept the host key, compare its fingerprint with the server console ([below](#first-ssh-connection-closed-after-accepting-the-host-key)).
+From another machine: `ssh jesse_j@192.168.68.81`. Before you accept the host key, compare its fingerprint with the server console ([below](#first-ssh-connection-closed-after-accepting-the-host-key)).
 
 ### 5. Time zone
 

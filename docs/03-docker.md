@@ -48,7 +48,7 @@ Run AdGuard Home and Jellyfin as containers from one `docker-compose.yml`, with 
 
 ### Updating
 
-> **AdGuard is the DNS for the whole house.** Recreating the `adguard` container takes DNS down for every device until it's back. Do it at a quiet time and have a fallback ready (e.g. temporarily switch the eero's DNS to ISP DNS (Default), see [05](05-adguard-home.md#if-the-server-is-down)).
+> **AdGuard is the DNS for the whole house.** Recreating the `adguard` container takes DNS down for every device until it's back. Do it at a quiet time and have a fallback ready (e.g. temporarily change the Deco's DHCP Server Primary DNS to a public resolver, see [05](05-adguard-home.md#if-the-server-is-down)).
 
 The images are pinned by digest, so `docker compose pull` won't fetch anything new by itself. To update:
 
@@ -92,7 +92,7 @@ You can override the defaults with environment variables, e.g. `DISK_LIMIT=90 ./
 
 | Variable | Default |
 |---|---|
-| `DNS_SERVER` | `192.168.4.46` |
+| `DNS_SERVER` | `192.168.68.81` |
 | `MEDIA_MOUNT` | `/mnt/media` |
 | `JELLYFIN_URL` | `http://localhost:8096` |
 | `DISK_PATH` | `/` |

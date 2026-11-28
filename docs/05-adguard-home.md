@@ -2,7 +2,7 @@
 
 ## Goal
 
-Block ads and trackers for every device in the house at the DNS level, by making the server the eero's DNS.
+Block ads and trackers for every device in the house at the DNS level, by making the server the router's DNS (a TP-Link Deco since 2026-11-27; an eero before that).
 
 > **AdGuard is the DNS for the whole house.** If the `adguard` container stops or gets recreated, every device loses DNS. Don't stop or restart it without warning the household first; see the update procedure in [03](03-docker.md#updating).
 
@@ -27,7 +27,7 @@ General settings:
 
 | Setting | Value |
 |---|---|
-| Browsing security (malware/phishing) | Enabled. Replaces the eero Secure protection I turned off ([below](#eero-custom-dns-greyed-out)) |
+| Browsing security (malware/phishing) | Enabled. Replaces the eero Secure protection I turned off on the old eero router ([below](#eero-custom-dns-greyed-out)) |
 | Parental control | Off |
 | Safe search | Off |
 | Query log rotation | 30 days (changed from 90, to limit disk use and privacy exposure) |
@@ -40,12 +40,13 @@ The settings above were not read from `adguard/conf`, which holds credentials an
 
 1. Free port 53 on the host ([below](#port-53-held-by-systemd-resolved)).
 2. `docker compose up -d adguard`.
-3. Open `http://192.168.4.46:3000` for the first-run wizard. Set the admin UI to port **8080** and DNS to port **53**.
-4. In the admin UI (`http://192.168.4.46:8080`):
+3. Open `http://192.168.68.81:3000` for the first-run wizard. Set the admin UI to port **8080** and DNS to port **53**.
+4. In the admin UI (`http://192.168.68.81:8080`):
    - *Filters → DNS blocklists*: enable AdGuard DNS filter, add OISD Big, disable AdAway.
    - *Settings → DNS settings*: set the upstreams, upstream mode, fallback, bootstrap, private reverse DNS and timeout from the table above.
    - *Settings → General settings*: enable browsing security, leave parental control and safe search off, set query log rotation to 30 days.
-5. In the eero app, turn off **all eero Secure features** ([below](#eero-custom-dns-greyed-out)), then set **Custom DNS** to `192.168.4.46`.
+5. In the Deco app, open **More → Advanced → DHCP Server** and set **Primary DNS** to `192.168.68.81`. Then turn **IPv6** off (**More → Advanced → IPv6**), so devices can't get an IPv6 DNS server from the router and bypass AdGuard.
+   - On the old eero (before 2026-11-27): turn off **all eero Secure features** ([below](#eero-custom-dns-greyed-out)), then set **Custom DNS** to the server's IP.
 
 ## Verification
 
@@ -53,20 +54,22 @@ From a laptop on the LAN:
 
 ```
 nslookup doubleclick.net
-Server:  192.168.4.46
+Server:  192.168.68.81
 ...
 Address: 0.0.0.0
 ```
 
-The answer should come from `192.168.4.46` and resolve to `0.0.0.0`, which means it's blocked.
+The answer should come from `192.168.68.81` and resolve to `0.0.0.0`, which means it's blocked.
 
-![nslookup doubleclick.net from a Windows laptop returning 0.0.0.0 via 192.168.4.46](screenshots/nslookup-doubleclick-blocked.png)
+![nslookup doubleclick.net from a Windows laptop returning 0.0.0.0 via 192.168.4.46 (before the 2026-11-27 router swap)](screenshots/nslookup-doubleclick-blocked.png)
+
+This screenshot was taken on the old eero network, so it shows `192.168.4.46`.
 
 From the server (also checked by health checks 3 and 4):
 
 ```bash
-dig @192.168.4.46 doubleclick.net +short   # 0.0.0.0
-dig @192.168.4.46 google.com +short        # a real IP
+dig @192.168.68.81 doubleclick.net +short  # 0.0.0.0
+dig @192.168.68.81 google.com +short       # a real IP
 sudo ss -tulpn | grep ':53 '               # only AdGuard listening
 ```
 
@@ -119,7 +122,7 @@ Checked 2026-11-23: the override file is in place and `/etc/resolv.conf` → `/r
 
 ### eero Custom DNS greyed out
 
-The Custom DNS option in the eero app couldn't be changed.
+On the old eero router (before 2026-11-27), the Custom DNS option in the eero app couldn't be changed. The Deco doesn't have this problem: DNS is set in its DHCP Server settings ([Steps](#steps)).
 
 Fix: turn off **all eero Secure features** (eero Plus ad blocking and filtering use their own DNS). After that, Custom DNS can be set. AdGuard's browsing security now covers the malware/phishing protection eero Secure used to provide.
 
@@ -146,8 +149,11 @@ Never commit `AdGuardHome.yaml` or its backup. They live in `adguard/`, which is
 
 Every device loses DNS while AdGuard is down. To get the house back online:
 
-1. In the eero app, go to **Settings → Network settings → DNS** and choose **ISP DNS (Default)**.
-2. After the server is fixed, switch back to **Custom** DNS `192.168.4.46`.
+1. In the Deco app, open **More → Advanced → DHCP Server** and change **Primary DNS** from `192.168.68.81` to a public resolver such as `1.1.1.1`.
+2. Devices pick up the new DNS when they renew their DHCP lease. To speed that up, turn Wi-Fi off and on, or reconnect the device.
+3. After the server is fixed, set **Primary DNS** back to `192.168.68.81`.
+
+On the old eero, the fallback was **Settings → Network settings → DNS → ISP DNS (Default)**, then back to **Custom** DNS afterwards.
 
 ## What I learned
 
@@ -155,10 +161,10 @@ Every device loses DNS while AdGuard is down. To get the house back online:
 - A lot of home network traffic is telemetry. Smart TVs and apps constantly report usage, and about 17% of my household's DNS queries were ads and trackers.
 - Two services can't use the same port. `systemd-resolved` was holding port 53, so I had to disable its stub listener before AdGuard could run.
 - Rate limiting works. Too many wrong passwords locked me out for 12 minutes, which is the same protection that stops brute-force attacks.
-- When one device handles DNS for everyone, it's a single point of failure, so I documented a fallback (switching the eero back to ISP DNS).
+- When one device handles DNS for everyone, it's a single point of failure, so I documented a fallback (switching the router's DNS away from the server).
 
 ## Next steps
 
 - [x] Fill in the upstream mode (parallel requests).
-- [x] A fallback DNS plan for when the server is down: switch the eero back to ISP DNS ([steps](#if-the-server-is-down)).
+- [x] A fallback DNS plan for when the server is down: switch the router's DNS away from the server ([steps](#if-the-server-is-down)).
 - [ ] Put the admin UI behind Nginx Proxy Manager (80/443) once it's set up.
